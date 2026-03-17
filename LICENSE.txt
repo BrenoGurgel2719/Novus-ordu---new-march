@@ -1,0 +1,67 @@
+NOVUS ORDO — HTML TEMPLATE
+Standard License Agreement
+Version 1.0 — March 2026
+
+========================================
+GRANT OF LICENSE
+========================================
+
+Upon purchase of a single license, you are granted a non-exclusive,
+non-transferable right to use this template subject to the terms below.
+
+========================================
+PERMITTED USES
+========================================
+
+✓ Use this template to create ONE (1) end product for yourself or one client.
+✓ Modify the HTML, CSS, and JavaScript source code freely.
+✓ Use the end product for commercial purposes (e.g., a live business website).
+✓ Remove or replace any placeholder content, branding, and copy.
+
+========================================
+PROHIBITED USES
+========================================
+
+✗ You may NOT resell, redistribute, or sublicense this template in original
+  or modified form as a standalone template or theme.
+
+✗ You may NOT use this template for more than one end product under a single
+  Regular License. Purchase additional licenses for each additional end product.
+
+✗ You may NOT make the template available as an open-source project or in any
+  publicly accessible repository in a way that allows others to use it for free.
+
+========================================
+THIRD-PARTY COMPONENTS
+========================================
+
+This template includes or references the following third-party libraries,
+each governed by their own open-source licenses:
+
+- Lenis (MIT) — https://github.com/darkroomengineering/lenis
+- Anime.js (MIT) — https://github.com/juliangarnier/anime
+- CountUp.js (MIT) — https://github.com/inorganik/countUp.js
+- Font Awesome Free (CC BY 4.0 / MIT / SIL OFL) — https://fontawesome.com/license/free
+- Montserrat (SIL OFL 1.1) — https://fonts.google.com/specimen/Montserrat
+- Outfit (SIL OFL 1.1) — https://fonts.google.com/specimen/Outfit
+- Inter (SIL OFL 1.1) — https://rsms.me/inter/
+
+You are responsible for complying with the individual licenses of any
+third-party libraries included or referenced in this template.
+
+========================================
+DISCLAIMER
+========================================
+
+THIS TEMPLATE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED. THE AUTHOR SHALL NOT BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY ARISING FROM THE USE OF THIS TEMPLATE.
+
+========================================
+CONTACT
+========================================
+
+For licensing questions or support, contact:
+contato@novusordo.com.br
+
+© 2026 Novus Ordo Template. All rights reserved.
