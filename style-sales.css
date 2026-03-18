@@ -66,6 +66,7 @@
   align-items: start;
   max-width: 1240px;
   width: 100%;
+  min-height: 100vh;
   margin: 0 auto;
   padding: 0 40px;
   position: relative;
