@@ -180,8 +180,8 @@
             <!-- Thumbnail + overlay de play -->
             <div class="vsl-thumbnail" id="vsl-thumbnail">
               <!-- Replace src with the actual video thumbnail.-->
-              <img src="images/favicon.avif" width="32" height="32" alt="Watch presentation: how Novus Ordo transforms financial operations"
-                loading="eager">
+              <img src="images/favicon.avif" width="640" height="360" alt="Watch presentation: how Novus Ordo transforms financial operations"
+               fetchpriority="high" decoding="async">
               <div class="vsl-overlay" aria-hidden="true"></div>
               <button class="vsl-play-btn" id="vsl-play-btn" aria-label="Play presentation video">
                 <div class="play-ring" aria-hidden="true"></div>
@@ -375,7 +375,7 @@
             <div class="service-image">
               <!-- FIX: alt descritivo real -->
               <img src="images/financeiro-600.avif"
-                alt="Professionals analyzing capital raising data on financial screens" loading="lazy">
+                alt="Professionals analyzing capital raising data on financial screens" loading="lazy" decoding="async">
             </div>
             <div class="service-content">
               <span class="service-number" aria-hidden="true">01</span>
