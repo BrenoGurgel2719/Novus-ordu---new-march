@@ -338,7 +338,7 @@ const ctx = canvas.getContext('2d');
 
 let points = [];
 let mouse = { x: null, y: null };
-const POINT_COUNT = 80;       // FIX: reduced from 100 to 80 to improve performance
+const POINT_COUNT = 80;       //
 const CONNECTION_DIST = 160;
 const MOUSE_DIST = 200;
 

@@ -47,7 +47,7 @@ Every interaction — from the scroll-triggered reveals to the FAQ accordion —
 
 ## Live Preview
 
-> 🔗 [**View Live Demo →**](https://your-demo-url.com)
+> 🔗 [**View Live Demo →**](https://brenogurgel2719.github.io/Novus-ordu---new-march/)
 
 ---
 
@@ -150,8 +150,8 @@ Search for these strings in `index.html` and update them:
 |---|---|
 | `https://novusordo.com.br/` | Your actual domain |
 | `contato@novusordo.com.br` | Your contact email |
-| `+55 (11) 3000-0000` | Your phone number |
-| `São Paulo, SP — Brasil` | Your location |
+| `+1 (555) 300-0000` | Your phone number |
+| `New York, NY — United States` | Your location |
 | `https://novusordo.com.br/imagens/og-cover.jpg` | Your OG image URL |
 | `Roberto Alencar`, `Mariana Costa`, etc. | Real client testimonials or keep as fictional |
 
@@ -161,13 +161,13 @@ Search for these strings in `index.html` and update them:
 
 | File | Used in | Replace with |
 |---|---|---|
-| `imagens/financeiro.png` | Services card (both variants) | Your own licensed photo |
-| `imagens/vsl-thumbnail.jpg` | VSL player thumbnail (`index-sales.html`) | A real frame from your video |
+| `images/financeiro.png` | Services card (both variants) | Your own licensed photo |
+| `images/favicon.png` | VSL player thumbnail (`index-sales.html`) | A real frame from your video |
 
-Replace `imagens/financeiro.png` with your own photo. Recommended: **1200×800px**, `.webp` format for best performance. Update the `src` attribute in the featured service card:
+Replace `images/financeiro.png` with your own photo. Recommended: **1200×800px**, `.webp` format for best performance. Update the `src` attribute in the featured service card:
 
 ```html
-<img src="imagens/sua-imagem.webp" alt="Descrição da imagem" loading="lazy">
+<img src="images/sua-imagem.webp" alt="Image description" loading="lazy">
 ```
 
 ### 4. Connect the form
@@ -226,9 +226,9 @@ data-src="https://www.youtube.com/embed/YOUR_VIDEO_ID?autoplay=1&rel=0&modestbra
 data-src="https://player.vimeo.com/video/YOUR_VIDEO_ID?autoplay=1"
 ```
 
-Also replace the thumbnail `<img>` (`imagens/vsl-thumbnail.jpg`) with an actual frame from your video. The current thumbnail is an **AI-generated placeholder** — using a real video frame significantly improves click-through rates on the play button.
+Also replace the thumbnail `<img>` (`images/favicon.png`) with an actual frame from your video. The current thumbnail is an **AI-generated placeholder** — using a real video frame significantly improves click-through rates on the play button.
 
-**To connect the lead form**, find the comment `// Aqui integrar com seu CRM` in `index-sales.html` and replace the `setTimeout` with a real `fetch()` to your endpoint (same pattern as the main form — see [Connect the form](#3-connect-the-form) above).
+**To connect the lead form**, find the comment `// Connect to your CRM / webhook here.` in `script.js` and replace the `setTimeout` with a real `fetch()` to your endpoint (same pattern as the main form — see [Connect the form](#3-connect-the-form) above).
 
 | | Institutional | Sales Focus |
 |---|---|---|
@@ -306,7 +306,7 @@ To use an `<img>` logo instead:
 
 ```html
 <a href="#" class="nav-logo">
-  <img src="imagens/logo.svg" alt="Nome da empresa" height="32">
+  <img src="imagen/logo.svg" alt="Company`s name" height="32">
 </a>
 ```
 
@@ -554,6 +554,6 @@ When contacting support, please include:
 
 Made with ✦ and a lot of `cubic-bezier`
 
-**[Novus Ordo Template](https://your-demo-url.com)** · v1.1.0 · March 2026
+**[Novus Ordo Template](https://brenogurgel2719.github.io/Novus-ordu---new-march/)** · v1.1.0 · March 2026
 
 </div>
