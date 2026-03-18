@@ -149,10 +149,10 @@ Search for these strings in `index.html` and update them:
 | Placeholder | Replace with |
 |---|---|
 | `https://novusordo.com.br/` | Your actual domain |
-| `contato@novusordo.com.br` | Your contact email |
+| `gurgelbreno1@gmail.com` | Your contact email |
 | `+1 (555) 300-0000` | Your phone number |
 | `New York, NY — United States` | Your location |
-| `https://novusordo.com.br/imagens/og-cover.jpg` | Your OG image URL |
+| `https://novusordo.com.br/images/og-cover.jpg` | Your OG image URL |
 | `Roberto Alencar`, `Mariana Costa`, etc. | Real client testimonials or keep as fictional |
 
 ### 3. Replace the placeholder images
