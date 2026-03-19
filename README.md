@@ -99,7 +99,7 @@ Every interaction — from the scroll-triggered reveals to the FAQ accordion —
 
 ## File Structure
 
-```
+```                            
 novus-ordo/
 │
 ├── index.html              # Variant 1 — Institutional Landing Page
