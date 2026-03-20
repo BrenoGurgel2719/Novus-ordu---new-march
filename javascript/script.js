@@ -3,6 +3,13 @@
 ════════════════════════════════════════════════════════════════ */
 
 // ─────────────────────────────────────────────
+// GLOBAL — mobile detection
+// Declared at the top so all modules can use it
+// ─────────────────────────────────────────────
+const isMobile = window.matchMedia('(max-width: 767px)').matches;
+const isTablet = window.matchMedia('(max-width: 1024px)').matches;
+
+// ─────────────────────────────────────────────
 // 0. NAVBAR — scroll hide/show + mobile menu
 // ─────────────────────────────────────────────
 (function initNavbar() {
@@ -342,8 +349,6 @@ if (yearEl) yearEl.textContent = new Date().getFullYear();
 const canvas = document.getElementById('network-canvas');
 
 // Detect mobile — skip canvas entirely to save CPU + FCP time
-const isMobile = window.matchMedia('(max-width: 767px)').matches;
-
 if (isMobile) {
   // Hide canvas on mobile — saves ~60ms of main thread work per frame
   if (canvas) canvas.style.display = 'none';
@@ -354,7 +359,6 @@ if (isMobile) {
   let mouse  = { x: null, y: null };
 
   // Fewer points on tablet vs desktop for better performance
-  const isTablet     = window.matchMedia('(max-width: 1024px)').matches;
   const POINT_COUNT    = isTablet ? 40 : 80;
   const CONNECTION_DIST = isTablet ? 120 : 160;
   const MOUSE_DIST     = 200;
@@ -470,9 +474,12 @@ const initBadgeRotation = () => {
 
 
 // ─────────────────────────────────────────────
-//3. ANIMATIONS WITH ANIME.JS — Scroll-triggered
+// 3. ANIME.JS — scroll-triggered section animations
+// NOTE: `defer` scripts run after DOM is parsed,
+// so DOMContentLoaded has already fired by the time
+// this script executes. We use an IIFE instead.
 // ─────────────────────────────────────────────
-document.addEventListener('DOMContentLoaded', () => {
+(function initAnimations() {
   initBadgeRotation();
 
   // Main observer of sections
@@ -575,7 +582,7 @@ document.addEventListener('DOMContentLoaded', () => {
         duration: 1000
       }, '-=1500');
   }
-});
+})();
 
 
 // ─────────────────────────────────────────────
