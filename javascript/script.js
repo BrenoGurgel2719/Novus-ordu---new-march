@@ -682,3 +682,5 @@ function animateNumber(numElement) {
         });
       });
     })();
+
+     
