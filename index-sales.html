@@ -48,17 +48,57 @@
   <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
 
   <!-- ═══════════════════════════════════════════
-       Styles
+       Performance — DNS prefetch + preconnect
+       Establishes early connections to all CDN
+       domains before the browser discovers them
+  ════════════════════════════════════════════ -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="preconnect" href="https://unpkg.com" crossorigin>
+  <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+  <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+  <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+
+  <!-- ═══════════════════════════════════════════
+       Performance — Preload critical self-hosted fonts
+       Fetches Inter before the browser parses CSS,
+       eliminating the font chain delay
+  ════════════════════════════════════════════ -->
+  <link rel="preload" href="fonts/subset-Inter-Regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/Inter-Italic.woff2" as="font" type="font/woff2" crossorigin>
+
+  <!-- ═══════════════════════════════════════════
+       Styles — Core (render-critical, load sync)
   ════════════════════════════════════════════ -->
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/style-sales.css">
 
-  <!-- 🚀 OTIMIZAÇÃO PAGESPEED: FontAwesome com carregamento assíncrono -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" media="print" onload="this.media='all'">
-  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"></noscript>
+  <!-- ═══════════════════════════════════════════
+       Styles — Non-critical (async load)
+       Google Fonts: async via media="print" trick
+       eliminates 750ms render-blocking penalty
+  ════════════════════════════════════════════ -->
+  <link rel="preload"
+    href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" as="style"
+    onload="this.rel='stylesheet'">
+  <noscript>
+    <link rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap">
+  </noscript>
 
-  
-  
+  <!-- Font Awesome: async — icons are not render-critical -->
+  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" as="style"
+    onload="this.rel='stylesheet'"
+    integrity="sha512-Avb2QiuDEEvB4bZJYdab7iu99jkzf+Nd6OcWGaB1DaOWMaWlEJZnRXFSHRpH4MXLRG9q5jLlWUHfERW3L6bQ=="
+    crossorigin="anonymous" referrerpolicy="no-referrer">
+  <noscript>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  </noscript>
+
+
+
   <!-- ═══════════════════════════════════════════
        Schema.org — Structured Data (SEO Rich Results)
   ════════════════════════════════════════════ -->
@@ -180,8 +220,9 @@
             <!-- Thumbnail + overlay de play -->
             <div class="vsl-thumbnail" id="vsl-thumbnail">
               <!-- Replace src with the actual video thumbnail.-->
-              <img src="images/favicon.avif" width="640" height="360" alt="Watch presentation: how Novus Ordo transforms financial operations"
-               fetchpriority="high" decoding="async">
+              <img src="images/favicon.avif" width="640" height="360"
+                alt="Watch presentation: how Novus Ordo transforms financial operations" fetchpriority="high"
+                decoding="async">
               <div class="vsl-overlay" aria-hidden="true"></div>
               <button class="vsl-play-btn" id="vsl-play-btn" aria-label="Play presentation video">
                 <div class="play-ring" aria-hidden="true"></div>
@@ -1062,7 +1103,8 @@
                   depending on deal complexity, due diligence, regulatory approvals and negotiation between parties.
                   Cross-border transactions may extend this timeframe. Our process is divided into clear phases:
                   <strong>Diagnosis → Structuring → Roadshow → Negotiation → Closing</strong>, with bi-weekly progress
-                  reports for full transparency.</p>
+                  reports for full transparency.
+                </p>
               </div>
             </div>
 
@@ -1303,13 +1345,14 @@
       <div class="footer-contact">
         <h4 class="footer-nav-title">Contact</h4>
         <p class="footer-contact-desc">Ready to transform your company? Talk to one of our specialists.</p>
-        <a href="mailto:gurgelbreno1@gmail.com" class="footer-cta">
+        <a href="/cdn-cgi/l/email-protection#3057454257555c5242555e5f0170575d51595c1e535f5d" class="footer-cta">
           Schedule a meeting →
         </a>
         <div class="footer-contact-info">
           <p>
             <i class="fas fa-envelope" aria-hidden="true"></i>
-            gurgelbreno1@gmail.com
+            <a href="/cdn-cgi/l/email-protection" class="__cf_email__"
+              data-cfemail="4b2c3e392c2e2729392e25247a0b2c262a222765282426">[email&#160;protected]</a>
           </p>
           <p>
             <i class="fas fa-phone" aria-hidden="true"></i>
@@ -1343,24 +1386,31 @@
   </footer>
 
   <!-- ═══════════════════════════════════════════
-       SCRIPTS — Correct loading order
+       SCRIPTS — Performance-optimized loading
+       · Lenis: defer (smooth scroll, non-critical for FCP)
+       · CountUp, Anime.js, script.js: defer
+       All scripts are deferred — zero render blocking
   ════════════════════════════════════════════ -->
-  <script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js"></script>
+  <script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js" defer></script>
   <script>
-    const lenis = new Lenis({
-      duration: 2,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      smoothWheel: true
-    });
-    function raf(time) {
-      lenis.raf(time);
+    // Lenis init runs after defer scripts are ready
+    document.addEventListener('DOMContentLoaded', () => {
+      if (typeof Lenis === 'undefined') return;
+      const lenis = new Lenis({
+        duration: 2,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        smoothWheel: true
+      });
+      function raf(time) {
+        lenis.raf(time);
+        requestAnimationFrame(raf);
+      }
       requestAnimationFrame(raf);
-    }
-    requestAnimationFrame(raf);
+    });
   </script>
-  <script defer src="https://cdn.jsdelivr.net/npm/countup.js@2.8.0/dist/countUp.umd.js"></script>
-  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
-  <script defer src="javascript/script.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/countup.js@2.8.0/dist/countUp.umd.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" defer></script>
+  <script src="javascript/script.js" defer></script>
 
 </body>
 

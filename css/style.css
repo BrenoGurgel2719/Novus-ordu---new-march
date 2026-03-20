@@ -1,11 +1,14 @@
 /* ═══════════════════════════════════════════
-   SOURCES
+   FONTS
+   Google Fonts (Montserrat) is loaded async
+   via <link rel="preload"> in the HTML head.
+   Removing @import here eliminates the
+   render-blocking CSS chain.
 ════════════════════════════════════════════ */
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 
 @font-face {
   font-family: 'Inter';
-  src: url("fontes/Inter-Italic.woff2") format('woff2');
+  src: url("fonts/Inter-Italic.woff2") format('woff2');
   font-weight: 100 900;
   font-style: italic;
   font-display: swap;
@@ -22,7 +25,7 @@
 @font-face {
   font-family: 'Outfit Variable';
   font-style: normal;
-  font-display: swap; 
+  font-display: swap;
   font-weight: 100 900;
   src: url('https://cdn.jsdelivr.net/fontsource/fonts/outfit:vf@latest/latin-wght-normal.woff2') format('woff2-variations');
 }

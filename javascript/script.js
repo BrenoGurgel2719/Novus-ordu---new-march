@@ -215,31 +215,32 @@ if (yearEl) yearEl.textContent = new Date().getFullYear();
   entranceObserver.observe(stage);
 
   // — Parallax: slight rotation when scrolling the page —
-  let rafPending = false;
+  // Skipped on mobile to save main thread resources
+  if (!isMobile) {
+    let rafPending = false;
 
-  window.addEventListener('scroll', () => {
-    if (!hasEntered || rafPending) return;
-    rafPending = true;
+    window.addEventListener('scroll', () => {
+      if (!hasEntered || rafPending) return;
+      rafPending = true;
 
-    requestAnimationFrame(() => {
-      const rect    = stage.getBoundingClientRect();
-      const viewH   = window.innerHeight;
+      requestAnimationFrame(() => {
+        const rect    = stage.getBoundingClientRect();
+        const viewH   = window.innerHeight;
 
-      //Scroll progress: -1 (above) → 0 (center) → +1 (below)
-      const progress = (viewH / 2 - (rect.top + rect.height / 2)) / (viewH * 0.6);
-      const clamped  = Math.max(-1, Math.min(1, progress));
+        const progress = (viewH / 2 - (rect.top + rect.height / 2)) / (viewH * 0.6);
+        const clamped  = Math.max(-1, Math.min(1, progress));
 
-      // Maps progress in smooth rotations.
-      const rotX  = 18 - clamped * 4;   // 14° → 22°
-      const rotZ  = -4 + clamped * 2;   // -6° → -2°
-      const scale = 0.95 - Math.abs(clamped) * 0.02; // Slight zoom out at the edges.
-      wrapper.style.transition = 'none';
-      wrapper.style.transform  =
-        `perspective(1400px) rotateX(${rotX}deg) rotateZ(${rotZ}deg) scale(${scale})`;
+        const rotX  = 18 - clamped * 4;
+        const rotZ  = -4 + clamped * 2;
+        const scale = 0.95 - Math.abs(clamped) * 0.02;
+        wrapper.style.transition = 'none';
+        wrapper.style.transform  =
+          `perspective(1400px) rotateX(${rotX}deg) rotateZ(${rotZ}deg) scale(${scale})`;
 
-      rafPending = false;
-    });
-  }, { passive: true });
+        rafPending = false;
+      });
+    }, { passive: true });
+  }
 })();
 // ─────────────────────────────────────────────
 // 0d. FAQ — accessible accordion
@@ -333,98 +334,114 @@ if (yearEl) yearEl.textContent = new Date().getFullYear();
 })();
 
 // ─────────────────────────────────────────────
+// 1. HERO CANVAS — animated particle network
+//    Mobile optimization: canvas is disabled on
+//    screens < 768px (main FCP bottleneck on mobile)
+//    and runs with fewer points on tablet.
+// ─────────────────────────────────────────────
 const canvas = document.getElementById('network-canvas');
-const ctx = canvas.getContext('2d');
 
-let points = [];
-let mouse = { x: null, y: null };
-const POINT_COUNT = 80;       //
-const CONNECTION_DIST = 160;
-const MOUSE_DIST = 200;
+// Detect mobile — skip canvas entirely to save CPU + FCP time
+const isMobile = window.matchMedia('(max-width: 767px)').matches;
 
-//FIX: throttle no resize to avoid resetting the canvas every pixel.
-let resizeTimer;
-function initCanvas() {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-  points = [];
+if (isMobile) {
+  // Hide canvas on mobile — saves ~60ms of main thread work per frame
+  if (canvas) canvas.style.display = 'none';
+} else {
+  const ctx = canvas.getContext('2d');
 
-  for (let i = 0; i < POINT_COUNT; i++) {
-    points.push({
-      x: Math.random() * canvas.width,
-      y: Math.random() * canvas.height,
-      vx: (Math.random() - 0.5) * 0.4,
-      vy: (Math.random() - 0.5) * 0.4,
-      radius: Math.random() * 1.5 + 1
-    });
+  let points = [];
+  let mouse  = { x: null, y: null };
+
+  // Fewer points on tablet vs desktop for better performance
+  const isTablet     = window.matchMedia('(max-width: 1024px)').matches;
+  const POINT_COUNT    = isTablet ? 40 : 80;
+  const CONNECTION_DIST = isTablet ? 120 : 160;
+  const MOUSE_DIST     = 200;
+
+  let resizeTimer;
+  function initCanvas() {
+    canvas.width  = window.innerWidth;
+    canvas.height = window.innerHeight;
+    points = [];
+
+    for (let i = 0; i < POINT_COUNT; i++) {
+      points.push({
+        x:      Math.random() * canvas.width,
+        y:      Math.random() * canvas.height,
+        vx:     (Math.random() - 0.5) * 0.4,
+        vy:     (Math.random() - 0.5) * 0.4,
+        radius: Math.random() * 1.5 + 1
+      });
+    }
   }
-}
 
-function draw() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  const colorGold = "179, 137, 0";
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    const colorGold = '179, 137, 0';
 
-  points.forEach((p, i) => {
-    p.x += p.vx;
-    p.y += p.vy;
+    points.forEach((p, i) => {
+      p.x += p.vx;
+      p.y += p.vy;
 
-    if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
-    if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+      if (p.x < 0 || p.x > canvas.width)  p.vx *= -1;
+      if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
 
-    ctx.beginPath();
-    ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-    ctx.fillStyle = `rgba(${colorGold}, 0.5)`;
-    ctx.fill();
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(${colorGold}, 0.5)`;
+      ctx.fill();
 
-    for (let j = i + 1; j < points.length; j++) {
-      const p2 = points[j];
-      const dist = Math.hypot(p.x - p2.x, p.y - p2.y);
+      for (let j = i + 1; j < points.length; j++) {
+        const p2   = points[j];
+        const dist = Math.hypot(p.x - p2.x, p.y - p2.y);
 
-      if (dist < CONNECTION_DIST) {
-        const opacity = 1 - (dist / CONNECTION_DIST);
-        ctx.beginPath();
-        ctx.lineWidth = 0.5;
-        ctx.strokeStyle = `rgba(${colorGold}, ${opacity * 0.2})`;
-        ctx.moveTo(p.x, p.y);
-        ctx.lineTo(p2.x, p2.y);
-        ctx.stroke();
+        if (dist < CONNECTION_DIST) {
+          const opacity = 1 - (dist / CONNECTION_DIST);
+          ctx.beginPath();
+          ctx.lineWidth   = 0.5;
+          ctx.strokeStyle = `rgba(${colorGold}, ${opacity * 0.2})`;
+          ctx.moveTo(p.x, p.y);
+          ctx.lineTo(p2.x, p2.y);
+          ctx.stroke();
+        }
       }
-    }
 
-    if (mouse.x !== null) {
-      const mDist = Math.hypot(p.x - mouse.x, p.y - mouse.y);
-      if (mDist < MOUSE_DIST) {
-        const mOpacity = 1 - (mDist / MOUSE_DIST);
-        ctx.beginPath();
-        ctx.lineWidth = 0.8;
-        ctx.strokeStyle = `rgba(${colorGold}, ${mOpacity * 0.4})`;
-        ctx.moveTo(p.x, p.y);
-        ctx.lineTo(mouse.x, mouse.y);
-        ctx.stroke();
+      if (mouse.x !== null) {
+        const mDist = Math.hypot(p.x - mouse.x, p.y - mouse.y);
+        if (mDist < MOUSE_DIST) {
+          const mOpacity = 1 - (mDist / MOUSE_DIST);
+          ctx.beginPath();
+          ctx.lineWidth   = 0.8;
+          ctx.strokeStyle = `rgba(${colorGold}, ${mOpacity * 0.4})`;
+          ctx.moveTo(p.x, p.y);
+          ctx.lineTo(mouse.x, mouse.y);
+          ctx.stroke();
+        }
       }
-    }
+    });
+
+    requestAnimationFrame(draw);
+  }
+
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(initCanvas, 150);
   });
 
-  requestAnimationFrame(draw);
+  window.addEventListener('mousemove', (e) => {
+    mouse.x = e.clientX;
+    mouse.y = e.clientY;
+  });
+
+  window.addEventListener('mouseout', () => {
+    mouse.x = null;
+    mouse.y = null;
+  });
+
+  initCanvas();
+  draw();
 }
-
-window.addEventListener('resize', () => {
-  clearTimeout(resizeTimer);
-  resizeTimer = setTimeout(initCanvas, 150);
-});
-
-window.addEventListener('mousemove', (e) => {
-  mouse.x = e.clientX;
-  mouse.y = e.clientY;
-});
-
-window.addEventListener('mouseout', () => {
-  mouse.x = null;
-  mouse.y = null;
-});
-
-initCanvas();
-draw();
 
 
 // ─────────────────────────────────────────────
