@@ -57,6 +57,16 @@ body {
   color: var(--text-primary);
   min-height: 100vh;
   position: relative;
+  opacity: 0;
+  transform: translateY(-6px);
+  animation: down 1s ease forwards;
+}
+
+@keyframes dowm{
+  to{
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Accessibility: skip-link for screen readers */
