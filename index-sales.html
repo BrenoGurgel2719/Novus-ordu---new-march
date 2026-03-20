@@ -48,203 +48,17 @@
   <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
 
   <!-- ═══════════════════════════════════════════
-       Performance — DNS prefetch + preconnect
-       Establishes early connections to all CDN
-       domains before the browser discovers them
-  ════════════════════════════════════════════ -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
-  <link rel="preconnect" href="https://unpkg.com" crossorigin>
-  <link rel="dns-prefetch" href="https://fonts.googleapis.com">
-  <link rel="dns-prefetch" href="https://fonts.gstatic.com">
-  <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
-
-  <!-- ═══════════════════════════════════════════
-       Performance — Preload critical self-hosted fonts
-       Fetches Inter before the browser parses CSS,
-       eliminating the font chain delay
-  ════════════════════════════════════════════ -->
-  <link rel="preload" href="fonts/subset-Inter-Regular.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="fonts/Inter-Italic.woff2" as="font" type="font/woff2" crossorigin>
-
-  <!-- ═══════════════════════════════════════════
-       Styles — Core (render-critical, load sync)
+       Styles
   ════════════════════════════════════════════ -->
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/style-sales.css">
 
-  <style>
-    /* ═══════════════════════════════════════════
-   Font Awesome 6.5 — Minimal Subset
-   Only the 25 icons used in this template.
-   Zero external requests — fully inline.
-   Generated from FA 6.5.0 free/solid + brands
-════════════════════════════════════════════ */
+  <!-- 🚀 OTIMIZAÇÃO PAGESPEED: FontAwesome com carregamento assíncrono -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"></noscript>
 
-    /* Base font-face — Solid */
-    @font-face {
-      font-family: "Font Awesome 6 Free";
-      font-style: normal;
-      font-weight: 900;
-      font-display: block;
-      src: url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/webfonts/fa-solid-900.woff2") format("woff2");
-    }
-
-    /* Base font-face — Brands */
-    @font-face {
-      font-family: "Font Awesome 6 Brands";
-      font-style: normal;
-      font-weight: 400;
-      font-display: block;
-      src: url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/webfonts/fa-brands-400.woff2") format("woff2");
-    }
-
-    /* Base rules */
-    .fas,
-    .fab {
-      -moz-osx-font-smoothing: grayscale;
-      -webkit-font-smoothing: antialiased;
-      display: var(--fa-display, inline-block);
-      font-style: normal;
-      font-variant: normal;
-      line-height: 1;
-      text-rendering: auto;
-    }
-
-    .fas {
-      font-family: "Font Awesome 6 Free";
-      font-weight: 900;
-    }
-
-    .fab {
-      font-family: "Font Awesome 6 Brands";
-      font-weight: 400;
-    }
-
-    /* ── Solid icons used in this template ── */
-    .fa-arrow-right-arrow-left::before {
-      content: "\f362";
-    }
-
-    .fa-arrow-up::before {
-      content: "\f062";
-    }
-
-    .fa-bell::before {
-      content: "\f0f3";
-    }
-
-    .fa-bolt::before {
-      content: "\f0e7";
-    }
-
-    .fa-briefcase::before {
-      content: "\f0b1";
-    }
-
-    .fa-chart-line::before {
-      content: "\f201";
-    }
-
-    .fa-chart-pie::before {
-      content: "\f200";
-    }
-
-    .fa-check::before {
-      content: "\f00c";
-    }
-
-    .fa-chevron-down::before {
-      content: "\f078";
-    }
-
-    .fa-clock::before {
-      content: "\f017";
-    }
-
-    .fa-envelope::before {
-      content: "\f0e0";
-    }
-
-    .fa-file-contract::before {
-      content: "\f56c";
-    }
-
-    .fa-globe::before {
-      content: "\f0ac";
-    }
-
-    .fa-location-dot::before {
-      content: "\f3c5";
-    }
-
-    .fa-lock::before {
-      content: "\f023";
-    }
-
-    .fa-microchip::before {
-      content: "\f2db";
-    }
-
-    .fa-minus::before {
-      content: "\f068";
-    }
-
-    .fa-phone::before {
-      content: "\f095";
-    }
-
-    .fa-shield-halved::before {
-      content: "\e24b";
-    }
-
-    .fa-star::before {
-      content: "\f005";
-    }
-
-    .fa-users::before {
-      content: "\f0c0";
-    }
-
-    /* ── Brand icons used in this template ── */
-    .fa-instagram::before {
-      content: "\f16d";
-    }
-
-    .fa-linkedin-in::before {
-      content: "\f0e1";
-    }
-
-    .fa-x-twitter::before {
-      content: "\e61b";
-    }
-
-    .fa-youtube::before {
-      content: "\f167";
-    }
-  </style>
-
-  <!-- ═══════════════════════════════════════════
-       Styles — Non-critical (async load)
-       Google Fonts: async via media="print" trick
-       eliminates 750ms render-blocking penalty
-  ════════════════════════════════════════════ -->
-  <link rel="preload"
-    href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" as="style"
-    onload="this.rel='stylesheet'">
-  <noscript>
-    <link rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap">
-  </noscript>
-
-  <!-- Font Awesome — loaded synchronously -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
-    integrity="sha512-Avb2QiuDEEvB4bZJYdab7iu99jkzf+Nd6OcWGaB1DaOWMaWlEJZnRXFSHRpH4MXLRG9q5jLlWUHfERW3L6bQ=="
-    crossorigin="anonymous" referrerpolicy="no-referrer">
-
-
+  
+  
   <!-- ═══════════════════════════════════════════
        Schema.org — Structured Data (SEO Rich Results)
   ════════════════════════════════════════════ -->
@@ -366,9 +180,8 @@
             <!-- Thumbnail + overlay de play -->
             <div class="vsl-thumbnail" id="vsl-thumbnail">
               <!-- Replace src with the actual video thumbnail.-->
-              <img src="images/favicon.avif" width="640" height="360"
-                alt="Watch presentation: how Novus Ordo transforms financial operations" fetchpriority="high"
-                decoding="async">
+              <img src="images/favicon.avif" width="640" height="360" alt="Watch presentation: how Novus Ordo transforms financial operations"
+               fetchpriority="high" decoding="async">
               <div class="vsl-overlay" aria-hidden="true"></div>
               <button class="vsl-play-btn" id="vsl-play-btn" aria-label="Play presentation video">
                 <div class="play-ring" aria-hidden="true"></div>
@@ -1249,8 +1062,7 @@
                   depending on deal complexity, due diligence, regulatory approvals and negotiation between parties.
                   Cross-border transactions may extend this timeframe. Our process is divided into clear phases:
                   <strong>Diagnosis → Structuring → Roadshow → Negotiation → Closing</strong>, with bi-weekly progress
-                  reports for full transparency.
-                </p>
+                  reports for full transparency.</p>
               </div>
             </div>
 
@@ -1491,14 +1303,13 @@
       <div class="footer-contact">
         <h4 class="footer-nav-title">Contact</h4>
         <p class="footer-contact-desc">Ready to transform your company? Talk to one of our specialists.</p>
-        <a href="/cdn-cgi/l/email-protection#3057454257555c5242555e5f0170575d51595c1e535f5d" class="footer-cta">
+        <a href="mailto:gurgelbreno1@gmail.com" class="footer-cta">
           Schedule a meeting →
         </a>
         <div class="footer-contact-info">
           <p>
             <i class="fas fa-envelope" aria-hidden="true"></i>
-            <a href="/cdn-cgi/l/email-protection" class="__cf_email__"
-              data-cfemail="4b2c3e392c2e2729392e25247a0b2c262a222765282426">[email&#160;protected]</a>
+            gurgelbreno1@gmail.com
           </p>
           <p>
             <i class="fas fa-phone" aria-hidden="true"></i>
@@ -1532,31 +1343,24 @@
   </footer>
 
   <!-- ═══════════════════════════════════════════
-       SCRIPTS — Performance-optimized loading
-       · Lenis: defer (smooth scroll, non-critical for FCP)
-       · CountUp, Anime.js, script.js: defer
-       All scripts are deferred — zero render blocking
+       SCRIPTS — Correct loading order
   ════════════════════════════════════════════ -->
-  <script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js" defer></script>
+  <script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js"></script>
   <script>
-    // Lenis init runs after defer scripts are ready
-    document.addEventListener('DOMContentLoaded', () => {
-      if (typeof Lenis === 'undefined') return;
-      const lenis = new Lenis({
-        duration: 2,
-        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-        smoothWheel: true
-      });
-      function raf(time) {
-        lenis.raf(time);
-        requestAnimationFrame(raf);
-      }
-      requestAnimationFrame(raf);
+    const lenis = new Lenis({
+      duration: 2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: true
     });
+    function raf(time) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+    requestAnimationFrame(raf);
   </script>
-  <script src="https://cdn.jsdelivr.net/npm/countup.js@2.8.0/dist/countUp.umd.js" defer></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" defer></script>
-  <script src="javascript/script.js" defer></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/countup.js@2.8.0/dist/countUp.umd.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+  <script defer src="javascript/script.js"></script>
 
 </body>
 
