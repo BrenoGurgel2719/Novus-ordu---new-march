@@ -45,6 +45,34 @@
       --border-subtle: rgba(255,255,255,0.06);
     }
 
+    /* ── Reveal animations (standalone) ── */
+    .reveal-up {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+    .reveal-left {
+      opacity: 0;
+      transform: translateX(-30px);
+      transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+    .reveal-right {
+      opacity: 0;
+      transform: translateX(30px);
+      transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+    .reveal-up.show,
+    .reveal-left.show,
+    .reveal-right.show {
+      opacity: 1;
+      transform: translate(0, 0);
+    }
+    .delay-1 { transition-delay: 0.1s; }
+    .delay-2 { transition-delay: 0.2s; }
+    .delay-3 { transition-delay: 0.3s; }
+    .delay-4 { transition-delay: 0.4s; }
+    .delay-5 { transition-delay: 0.5s; }
+
     /* ── PAGE HERO ── */
     .page-hero {
       position: relative;
