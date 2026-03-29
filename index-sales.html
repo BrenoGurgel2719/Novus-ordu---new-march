@@ -2115,9 +2115,9 @@ nav.navbar {
        SCRIPTS — Correct loading order
   ════════════════════════════════════════════ -->
   <!-- CountUp.js — number animation (was missing, causing ReferenceError: countUp is not defined) -->
-  <script src="https://cdn.jsdelivr.net/npm/countup.js@2.8.0/dist/countUp.umd.js" defer></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/countup.js@2.8.0/dist/countUp.umd.js"></script>
   <!-- Anime.js — section animations -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" defer></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
   <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
 
   <!-- Lenis smooth scroll: only loaded on desktop (saves ~4.4KB parse + network on mobile) -->
@@ -2137,6 +2137,6 @@ nav.navbar {
     document.head.appendChild(_ls);
   }
   </script>
-  <script src="javascript/script.js" defer></script>
+  <script defer src="javascript/script.js"></script>
 </body>
 </html>
