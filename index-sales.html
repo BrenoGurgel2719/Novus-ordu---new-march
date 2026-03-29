@@ -6,22 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <!-- ═══════════════════════════════════════════
-       PERFORMANCE — Preconnect & resource hints
-  ════════════════════════════════════════════ -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
-  <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
-  <link rel="dns-prefetch" href="https://unpkg.com">
-
-  <!-- Preload critical self-hosted font (Inter Regular — body text) -->
-  <link rel="preload" href="fonts/subset-Inter-Regular.woff2" as="font" type="font/woff2" crossorigin>
-
-  <!-- Montserrat async — headings font (was missing, causing fallback to sans-serif) -->
-  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800;900&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
-  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800;900&display=swap"></noscript>
-
-  <!-- ═══════════════════════════════════════════
        SEO — Essential Meta Tags
   ════════════════════════════════════════════ -->
   <title>Novus Ordo — Schedule Your Free Diagnosis</title>
@@ -64,11 +48,9 @@
   <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
 
   <!-- ═══════════════════════════════════════════
-       Styles — critical CSS inlined, rest async
+       Styles
   ════════════════════════════════════════════ -->
-  <!-- style.css loaded async to eliminate render-blocking (saves ~150ms on mobile) -->
-  <link rel="preload" href="css/style.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-  <noscript><link rel="stylesheet" href="css/style.css"></noscript>
+  <link rel="stylesheet" href="css/style.css">
 
   <!-- 🚀 FontAwesome loading assyn -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" media="print" onload="this.media='all'">
@@ -92,45 +74,6 @@
   </script>
 
   <style>
-/* ═══════════════════════════════════════════════════════════════
-   CRITICAL CSS — inlined to prevent FOUC while style.css loads async
-   Contains only above-the-fold styles: reset, variables, body, navbar
-═══════════════════════════════════════════════════════════════ */
-*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-:root{--gold:#b38900;--gold-light:#ffdb6e;--glass:rgba(255,255,255,.06);--stroke:rgba(255,255,255,.14);--text-primary:#fff;--text-secondary:rgba(255,255,255,.7);--text-muted:#888;--bg:#000}
-body{background-color:var(--bg);color:var(--text-primary);min-height:100vh;position:relative}
-.container{max-width:1200px;margin:0 auto;padding:0 20px}
-@keyframes shine{to{background-position:200% center}}
-@keyframes pulse-dot{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.5);opacity:.6}}
-/* Navbar — critical (fixed, visible immediately on load) */
-.navbar{position:fixed;top:20px;left:50%;transform:translateX(-50%);width:min(1200px,calc(100% - 40px));z-index:1000;border-radius:20px;background:rgba(5,5,5,.55);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.08);box-shadow:0 8px 40px rgba(0,0,0,.4);transition:all .4s cubic-bezier(.23,1,.32,1);overflow:hidden}
-.navbar.hidden{transform:translateX(-50%) translateY(-120%);opacity:0}
-.navbar.scrolled{background:rgba(5,5,5,.85);border-color:rgba(179,137,0,.2);box-shadow:0 8px 40px rgba(0,0,0,.6),0 0 0 1px rgba(179,137,0,.05)}
-.nav-container{display:flex;align-items:center;justify-content:space-between;padding:14px 28px;gap:20px;box-sizing:border-box}
-.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:1;min-width:0}
-.nav-logo .logo-mark{font-size:1.1rem;background:linear-gradient(to right,#b38900 20%,#ffdb6e 40%,#ffdb6e 60%,#b38900 80%);background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:shine 5s linear infinite}
-.nav-logo .logo-text{font-family:'Montserrat',sans-serif;font-size:1.05rem;font-weight:400;letter-spacing:.5px;color:rgba(255,255,255,.85)}
-.nav-logo .logo-text strong{font-weight:800;color:#fff}
-.nav-links{display:flex;align-items:center;gap:4px;list-style:none;margin:0;padding:0}
-.nav-link{font-size:.82rem;font-weight:500;color:rgba(255,255,255,.6);text-decoration:none;padding:7px 14px;border-radius:10px;transition:all .25s ease;white-space:nowrap}
-.nav-link:hover{color:#fff;background:rgba(255,255,255,.06)}
-.nav-link.active{color:var(--gold)}
-.nav-cta{display:inline-flex;align-items:center;gap:10px;font-size:.8rem;font-weight:600;text-decoration:none;color:#000;background:linear-gradient(135deg,#ffcc33,#b38900);padding:9px 20px;border-radius:12px;white-space:nowrap;flex-shrink:0;transition:all .3s ease;box-shadow:0 4px 20px rgba(179,137,0,.25)}
-.nav-cta-dot{width:6px;height:6px;background:#000;border-radius:50%;animation:pulse-dot 2s ease-in-out infinite;flex-shrink:0}
-.nav-toggle{display:none;flex-direction:column;justify-content:center;align-items:center;gap:5px;width:36px;height:36px;background:transparent;border:1px solid rgba(255,255,255,.12);border-radius:10px;cursor:pointer;padding:0;flex-shrink:0;transition:border-color .3s}
-.bar{width:16px;height:1.5px;background:rgba(255,255,255,.8);border-radius:2px;display:block;transition:all .35s cubic-bezier(.23,1,.32,1)}
-.nav-toggle.open .bar:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
-.nav-toggle.open .bar:nth-child(2){opacity:0;transform:scaleX(0)}
-.nav-toggle.open .bar:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
-.mobile-menu{max-height:0;overflow:hidden;transition:max-height .5s cubic-bezier(.23,1,.32,1),padding .3s ease;border-top:0 solid transparent}
-.mobile-menu.open{max-height:400px;padding-bottom:16px;border-top:1px solid rgba(255,255,255,.06)}
-.mobile-menu ul{list-style:none;padding:12px 20px 0;display:flex;flex-direction:column;gap:4px}
-.mobile-link{display:block;font-size:.9rem;font-weight:500;color:rgba(255,255,255,.65);text-decoration:none;padding:10px 14px;border-radius:10px;transition:all .2s ease}
-@media(max-width:900px){.nav-links{display:none}}
-@media(max-width:640px){.nav-cta{display:none}.nav-container{padding:10px 14px;gap:12px}.nav-toggle{display:flex}}
-@media(min-width:641px) and (max-width:900px){.nav-toggle{display:flex}}
-/* ─────────────────────────────────────────────────────────────── */
-
     /* ── Faixa de urgência ────────────────────────────────────── */
 .sales-topbar {
   position: fixed;
@@ -2072,13 +2015,13 @@ nav.navbar {
       <div class="footer-contact">
         <h4 class="footer-nav-title">Contact</h4>
         <p class="footer-contact-desc">Ready to transform your company? Talk to one of our specialists.</p>
-        <a href="/cdn-cgi/l/email-protection#8aedfff8edefe6e8f8efe4e5bbcaede7ebe3e6a4e9e5e7" class="footer-cta">
+        <a href="mailto:gurgelbreno1@gmail.com" class="footer-cta">
           Schedule a meeting →
         </a>
         <div class="footer-contact-info">
           <p>
             <i class="fas fa-envelope" aria-hidden="true"></i>
-            <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="5037252237353c3222353e3f6110373d31393c7e333f3d">[email&#160;protected]</a>
+            gurgelbreno1@gmail.com
           </p>
           <p>
             <i class="fas fa-phone" aria-hidden="true"></i>
@@ -2114,29 +2057,31 @@ nav.navbar {
   <!-- ═══════════════════════════════════════════
        SCRIPTS — Correct loading order
   ════════════════════════════════════════════ -->
-  <!-- CountUp.js — number animation (was missing, causing ReferenceError: countUp is not defined) -->
-  <script defer src="https://cdn.jsdelivr.net/npm/countup.js@2.8.0/dist/countUp.umd.js"></script>
-  <!-- Anime.js — section animations -->
-  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
-  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
-
-  <!-- Lenis smooth scroll: only loaded on desktop (saves ~4.4KB parse + network on mobile) -->
+  <script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js"></script>
   <script>
-  if (window.innerWidth > 768) {
-    var _ls = document.createElement('script');
-    _ls.src = 'https://unpkg.com/lenis@1.1.18/dist/lenis.min.js';
-    _ls.onload = function() {
-      var lenis = new Lenis({
+  window.addEventListener("load", () => {
+    const isMobile = window.innerWidth <= 768;
+
+    if (!isMobile && typeof Lenis !== "undefined") {
+      const lenis = new Lenis({
         duration: 2,
-        easing: function(t) { return Math.min(1, 1.001 - Math.pow(2, -10 * t)); },
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
         smoothWheel: true
       });
-      function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
+
+      function raf(time) {
+        lenis.raf(time);
+        requestAnimationFrame(raf);
+      }
+
       requestAnimationFrame(raf);
-    };
-    document.head.appendChild(_ls);
-  }
-  </script>
+    }
+  });
+</script>
+  <script defer src="https://cdn.jsdelivr.net/npm/countup.js@2.8.0/dist/countUp.umd.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
   <script defer src="javascript/script.js"></script>
+
 </body>
+
 </html>
