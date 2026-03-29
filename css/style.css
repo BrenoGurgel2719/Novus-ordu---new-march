@@ -2910,18 +2910,7 @@ html.lenis body {
   overflow: hidden;
 }
 
-/* State: scrolled (JS adds .scrolled) */
-.navbar.scrolled {
-  background: rgba(5, 5, 5, 0.85);
-  border-color: rgba(179, 137, 0, 0.2);
-  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(179, 137, 0, 0.05);
-}
 
-/*Status: hidden when scrolling down, appears when scrolling up */
-.navbar.hidden {
-  transform: translateX(-50%) translateY(-120%);
-  opacity: 0;
-}
 
 .nav-container {
   display: flex;
