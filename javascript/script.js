@@ -226,15 +226,31 @@ if (yearEl) yearEl.textContent = new Date().getFullYear();
   if (!isMobile) {
     let rafPending = false;
 
+    // FIX: Cache stage position to avoid forced reflow on every scroll tick.
+    // getBoundingClientRect() inside a scroll handler triggers layout — expensive.
+    // ResizeObserver updates the cache only when the element actually resizes.
+    let stageOffsetTop = 0;
+    let stageHeight = 0;
+
+    const updateStageCache = () => {
+      const rect = stage.getBoundingClientRect();
+      stageOffsetTop = rect.top + window.scrollY;
+      stageHeight = rect.height;
+    };
+    updateStageCache();
+    new ResizeObserver(updateStageCache).observe(stage);
+    window.addEventListener('resize', updateStageCache, { passive: true });
+
     window.addEventListener('scroll', () => {
       if (!hasEntered || rafPending) return;
       rafPending = true;
 
       requestAnimationFrame(() => {
-        const rect    = stage.getBoundingClientRect();
-        const viewH   = window.innerHeight;
+        // Use pre-cached values — NO forced reflow
+        const viewH    = window.innerHeight;
+        const rectTop  = stageOffsetTop - window.scrollY;
 
-        const progress = (viewH / 2 - (rect.top + rect.height / 2)) / (viewH * 0.6);
+        const progress = (viewH / 2 - (rectTop + stageHeight / 2)) / (viewH * 0.6);
         const clamped  = Math.max(-1, Math.min(1, progress));
 
         const rotX  = 18 - clamped * 4;
@@ -488,15 +504,17 @@ const initBadgeRotation = () => {
       if (entry.isIntersecting) {
         const target = entry.target;
 
-        if (target.classList.contains('novus-concept'))    animateConcept(target);
-        if (target.classList.contains('services-section')) animateServices(target);
-        if (target.classList.contains('results-stats'))    animateStats(target);
-        if (target.classList.contains('methodology-section')) animateMethodology(target);
+        // Each animation is wrapped in try/catch so a failure in one
+        // section never silences the others in the same callback tick.
+        try { if (target.classList.contains('novus-concept'))       animateConcept(target);     } catch(e) { console.warn('animateConcept error', e); }
+        try { if (target.classList.contains('services-section'))    animateServices(target);    } catch(e) { console.warn('animateServices error', e); }
+        try { if (target.classList.contains('results-stats'))       animateStats(target);       } catch(e) { console.warn('animateStats error', e); }
+        try { if (target.classList.contains('methodology-section')) animateMethodology(target); } catch(e) { console.warn('animateMethodology error', e); }
 
         scrollObserver.unobserve(target);
       }
     });
-  }, { threshold: 0.15 }); // FIX: Reduced threshold for better triggering on mobile.
+  }, { threshold: 0.15 });
 
   document.querySelectorAll('section').forEach(section => {
     scrollObserver.observe(section);
@@ -590,7 +608,16 @@ const initBadgeRotation = () => {
 //   FIX: renamed from animatenumber → animateNumber (correct camelCase)
 // ─────────────────────────────────────────────
 function animateNumber(numElement) {
+  // Guard: if countUp failed to load, fall back to displaying the raw target value
+  if (typeof countUp === 'undefined') {
+    const suffix = numElement.dataset.suffix || '';
+    numElement.textContent = numElement.dataset.target + suffix;
+    console.warn('countUp not loaded — displaying static value.');
+    return;
+  }
+
   const target = +numElement.dataset.target;
+  const suffix = numElement.dataset.suffix || ''; // e.g. "K", "B", "%"
 
   const options = {
     duration: 3,
@@ -598,6 +625,7 @@ function animateNumber(numElement) {
     useGrouping: true,
     separator: '.',
     decimal: ',',
+    suffix: suffix,
   };
 
   const counter = new countUp.CountUp(numElement, target, options);
@@ -608,79 +636,3 @@ function animateNumber(numElement) {
     console.warn('CountUp error:', counter.error);
   }
 }
-
- // ── VSL Player — lazy-load iframe on play button click ─────────────────────────────────────────────
-    (function initVSL() {
-      const playBtn   = document.getElementById('vsl-play-btn');
-      const thumbnail = document.getElementById('vsl-thumbnail');
-      const iframe    = document.getElementById('vsl-iframe');
-
-      if (!playBtn || !iframe) return;
-
-      playBtn.addEventListener('click', () => {
-        // Load the real src (lazy-load the iframe)
-        if (!iframe.src) {
-          iframe.src = iframe.dataset.src;
-        }
-        thumbnail.classList.add('hidden');
-        iframe.classList.add('active');
-        iframe.setAttribute('aria-hidden', 'false');
-      });
-    })();
-
-    // ── Lead Form — validation and submission feedback ──────────────────────────────────────────────
-    (function initLeadForm() {
-      const btn     = document.getElementById('lead-submit-btn');
-      const form    = document.querySelector('.lead-form');
-      const success = document.getElementById('lead-success');
-      const slots   = document.getElementById('slots-count');
-
-      if (!btn) return;
-
-      // Simulates slot counter decrementing (urgency effect)
-      let count = 3;
-      const urgencyInterval = setInterval(() => {
-        count = Math.max(1, count - 1);
-        if (slots) slots.textContent = count;
-        if (count <= 1) clearInterval(urgencyInterval);
-      }, 45000); // decrements every 45s
-
-      btn.addEventListener('click', () => {
-        // Basic validation
-        const required = form.querySelectorAll('[required]');
-        let valid = true;
-
-        required.forEach(field => {
-          field.style.borderColor = '';
-          if (!field.value.trim()) {
-            field.style.borderColor = 'rgba(255, 95, 86, 0.6)';
-            field.focus();
-            valid = false;
-          }
-        });
-
-        if (!valid) return;
-
-        // Button loading animation
-        btn.disabled = true;
-        btn.querySelector('.lead-submit-text').textContent = 'loading...';
-
-        setTimeout(() => {
-          // Connect to your CRM / webhook here
-          // e.g. fetch('/api/lead', { method: 'POST', body: new FormData(form) })
-          form.style.display = 'none';
-          success.hidden = false;
-          document.querySelector('.lead-form-header').style.display = 'none';
-          document.querySelector('.lead-urgency').style.display = 'none';
-        }, 1200);
-      });
-
-      // Reset error border on input
-      form.querySelectorAll('input, select').forEach(field => {
-        field.addEventListener('input', () => {
-          field.style.borderColor = '';
-        });
-      });
-    })();
-
-     

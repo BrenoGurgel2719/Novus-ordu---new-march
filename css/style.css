@@ -6,6 +6,23 @@
    render-blocking CSS chain.
 ════════════════════════════════════════════ */
 
+/* Override FontAwesome font-display — CDN stylesheet doesn't set this,
+   causing PageSpeed to flag a 30ms delay. These declarations win via cascade. */
+@font-face {
+  font-family: 'Font Awesome 6 Free';
+  font-display: swap;
+  font-style: normal;
+  font-weight: 900;
+  src: url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/webfonts/fa-solid-900.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Font Awesome 6 Brands';
+  font-display: swap;
+  font-style: normal;
+  font-weight: 400;
+  src: url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/webfonts/fa-brands-400.woff2') format('woff2');
+}
+
 @font-face {
   font-family: 'Inter';
   src: url("fonts/Inter-Italic.woff2") format('woff2');
@@ -22,12 +39,17 @@
   font-display: swap;
 }
 
-@font-face {
-  font-family: 'Outfit Variable';
-  font-style: normal;
-  font-display: swap;
-  font-weight: 100 900;
-  src: url('https://cdn.jsdelivr.net/fontsource/fonts/outfit:vf@latest/latin-wght-normal.woff2') format('woff2-variations');
+/* Outfit Variable — only fetched on screens wider than 768px.
+   @font-face inside @media means the browser only downloads it when the query matches. */
+@media (min-width: 769px) {
+  @font-face {
+    font-family: 'Outfit Variable';
+    font-style: normal;
+    font-display: swap;
+    font-weight: 100 900;
+    /* Only loaded on desktop — saves the 32KB JSDelivr request on mobile */
+    src: url('https://cdn.jsdelivr.net/fontsource/fonts/outfit:vf@latest/latin-wght-normal.woff2') format('woff2-variations');
+  }
 }
 
 /* ═══════════════════════════════════════════
@@ -107,6 +129,14 @@ main>section {
 .mockup-section,
 .cta-section {
   overflow: hidden;
+}
+
+/* content-visibility: auto only on the CTA section (purely static, no scroll-observer animations)
+   Removed from .results-stats and .mockup-section — content-visibility breaks IntersectionObserver
+   in some browsers, causing animateStats and animateMethodology to never trigger. */
+.cta-section {
+  content-visibility: auto;
+  contain-intrinsic-size: 0 600px;
 }
 
 /* ═══════════════════════════════════════════
