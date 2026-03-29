@@ -20,28 +20,6 @@ const isTablet = window.matchMedia('(max-width: 1024px)').matches;
   const sections = document.querySelectorAll('section[id], header[id]');
   const navLinks = document.querySelectorAll('.nav-link');
 
-  if (!navbar) return;
-
-  // — Hide on scroll down, show on scroll up —
-  let lastScroll = 0;
-  let ticking = false;
-
-  window.addEventListener('scroll', () => {
-    if (!ticking) {
-      requestAnimationFrame(() => {
-        const current = window.scrollY;
-
-        // Added .scrolled after 50px
-        navbar.classList.toggle('scrolled', current > 50);
-
-        
-
-        lastScroll = current <= 0 ? 0 : current;
-        ticking = false;
-      });
-      ticking = true;
-    }
-  }, { passive: true });
 
   // — Active link based on visible section. (IntersectionObserver) —
   const sectionObserver = new IntersectionObserver((entries) => {
