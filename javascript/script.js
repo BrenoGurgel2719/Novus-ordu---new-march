@@ -34,12 +34,7 @@ const isTablet = window.matchMedia('(max-width: 1024px)').matches;
         // Added .scrolled after 50px
         navbar.classList.toggle('scrolled', current > 50);
 
-        // It hides when you scroll down, it shows when you scroll up
-        if (current > lastScroll && current > 120) {
-          navbar.classList.add('hidden');
-        } else {
-          navbar.classList.remove('hidden');
-        }
+        
 
         lastScroll = current <= 0 ? 0 : current;
         ticking = false;
