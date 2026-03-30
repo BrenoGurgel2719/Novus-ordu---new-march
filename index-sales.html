@@ -51,9 +51,16 @@
        Styles
   ════════════════════════════════════════════ -->
 
-  <link rel="preload" href="fonts/subset-Inter-Regular.woff2" as="font" type="font/woff2" crossorigin>
+  <!-- Preconnect para CDNs externos — elimina DNS lookup e TCP handshake do caminho crítico -->
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="preconnect" href="https://unpkg.com" crossorigin>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 
-  <link rel="preload" href="fonts/Montserrat-VariableFont_wght.ttf" as="font" type="font/truetype" crossorigin>
+  <!-- ATENÇÃO: converta Montserrat-VariableFont_wght.ttf → .woff2 (economiza ~60% de tamanho)
+       Ferramenta: https://cloudconvert.com/ttf-to-woff2
+       Depois mude o preload abaixo para as="font" type="font/woff2" -->
+  <link rel="preload" href="fonts/subset-Inter-Regular.woff2" as="font" type="font/woff2" crossorigin fetchpriority="high">
+  <link rel="preload" href="fonts/Montserrat-VariableFont_wght.ttf" as="font" type="font/truetype" crossorigin fetchpriority="high">
 
 
   <link rel="preload" href="css/style.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
@@ -91,7 +98,7 @@
       font-display: swap;
       font-style: normal;
       font-weight: 100 900;
-      src: url('fonts/Montserrat-VariableFont_wght.ttf') format('woff2');
+      src: url('fonts/Montserrat-VariableFont_wght.ttf') format('truetype');
     }
 
 
@@ -104,7 +111,6 @@
       font-display: swap;
     }
 
-
     @font-face {
       font-family: 'Inter';
       src: url('fonts/subset-Inter-Regular.woff2') format('woff2');
@@ -112,6 +118,8 @@
       font-style: normal;
       font-display: swap;
     }
+
+
 
 
     /* ═══════════════════════════════════════════
@@ -499,7 +507,7 @@
       }
     }
 
-
+    /* @font-face do Inter declarados uma única vez no início do <style> — duplicatas removidas */
 
     .hero::after {
       content: "";
@@ -551,10 +559,21 @@
       align-items: center;
       justify-content: center;
       gap: clamp(20px, 4vh, 32px);
-      will-change: transform
-     
+      animation: heroAppear 1.2s cubic-bezier(0.23, 1, 0.32, 1) both;
+      will-change: transform; /* promove para camada GPU — evita repaints */
     }
 
+    /* ⚡ LCP FIX: removido opacity:0 — h1 pintado imediatamente pelo browser.
+       Animação de translateY mantém o efeito visual sem bloquear o LCP. */
+    @keyframes heroAppear {
+      from {
+        transform: translateY(28px);
+      }
+
+      to {
+        transform: translateY(0);
+      }
+    }
 
     .cta-area-hero {
       display: flex;
@@ -767,7 +786,7 @@
       height: 200%;
       transform: translate(-50%, -50%);
       background: conic-gradient(transparent, transparent, transparent, #cf9f00, transparent 20%);
-      animation: rotateData 4s linear infinite !important;
+      animation: rotateData 4s linear infinite;
       z-index: -2;
     }
 
@@ -2750,13 +2769,13 @@
       <div class="footer-contact">
         <h4 class="footer-nav-title">Contact</h4>
         <p class="footer-contact-desc">Ready to transform your company? Talk to one of our specialists.</p>
-        <a href="mailto:gurgelbreno1@gmail.com" class="footer-cta">
+        <a href="/cdn-cgi/l/email-protection#c6a1b3b4a1a3aaa4b4a3a8a9f786a1aba7afaae8a5a9ab" class="footer-cta">
           Schedule a meeting →
         </a>
         <div class="footer-contact-info">
           <p>
             <i class="fas fa-envelope" aria-hidden="true"></i>
-            gurgelbreno1@gmail.com
+            <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="c5a2b0b7a2a0a9a7b7a0abaaf485a2a8a4aca9eba6aaa8">[email&#160;protected]</a>
           </p>
           <p>
             <i class="fas fa-phone" aria-hidden="true"></i>
@@ -2792,27 +2811,27 @@
   <!-- ═══════════════════════════════════════════
        SCRIPTS — Correct loading order
   ════════════════════════════════════════════ -->
-  <script defer src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js"></script>
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+  <!-- Lenis: carregado dinamicamente apenas em desktop, sem bloquear o parser HTML -->
   <script>
-    window.addEventListener("load", () => {
-      const isMobile = window.innerWidth <= 768;
-
-      if (!isMobile && typeof Lenis !== "undefined") {
-        const lenis = new Lenis({
+    if (window.innerWidth > 768) {
+      var _ls = document.createElement('script');
+      _ls.src = 'https://unpkg.com/lenis@1.1.18/dist/lenis.min.js';
+      _ls.defer = true;
+      _ls.onload = function() {
+        var lenis = new Lenis({
           duration: 2,
-          easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+          easing: function(t) { return Math.min(1, 1.001 - Math.pow(2, -10 * t)); },
           smoothWheel: true
         });
-
-        function raf(time) {
-          lenis.raf(time);
-          requestAnimationFrame(raf);
-        }
-
+        function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
         requestAnimationFrame(raf);
-      }
-    });
-  </script>
+      };
+      document.head.appendChild(_ls);
+    }
+    </script>
+
+  <!-- countup.js e anime.js: já estavam com defer — correto -->
   <script defer src="https://cdn.jsdelivr.net/npm/countup.js@2.8.0/dist/countUp.umd.js"></script>
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
   <script defer src="javascript/script.js"></script>
