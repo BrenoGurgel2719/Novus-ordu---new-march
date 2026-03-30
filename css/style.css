@@ -2973,6 +2973,30 @@ html.lenis body {
   }
 }
 
+LENIS SMOOTH SCROLL
+════════════════════════════════════════════ */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
+}
+
+
 @font-face {
       font-family: 'Font Awesome 6 Free';
       font-display: swap;
