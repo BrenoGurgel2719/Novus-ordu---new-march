@@ -56,11 +56,9 @@
   <link rel="preconnect" href="https://unpkg.com" crossorigin>
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 
-  <!-- ATENÇÃO: converta Montserrat-VariableFont_wght.ttf → .woff2 (economiza ~60% de tamanho)
-       Ferramenta: https://cloudconvert.com/ttf-to-woff2
-       Depois mude o preload abaixo para as="font" type="font/woff2" -->
+  
   <link rel="preload" href="fonts/subset-Inter-Regular.woff2" as="font" type="font/woff2" crossorigin fetchpriority="high">
-  <link rel="preload" href="fonts/Montserrat-VariableFont_wght.ttf" as="font" type="font/truetype" crossorigin fetchpriority="high">
+  
 
 
   <link rel="preload" href="css/style.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
@@ -93,17 +91,8 @@
   </script>
 
   <style>
-    @font-face {
-      font-family: 'Montserrat';
-      font-display: swap;
-      font-style: normal;
-      font-weight: 100 900;
-      src: url('fonts/Montserrat-VariableFont_wght.ttf') format('truetype');
-    }
-
-
-
-    @font-face {
+   
+   @font-face {
       font-family: 'Inter';
       src: url("fonts/Inter-Italic.woff2") format('woff2');
       font-weight: 100 900;
