@@ -65,7 +65,7 @@
   gap: 15px;
   transition: all 0.3s ease;
   cursor: pointer;
-  animation: float-pill 4s ease-in-out infinite !important;
+  animation: float-pill 4s ease-in-out infinite;
   font-family: "Montserrat", sans-serif;
   color: var(--text-primary);
 }
@@ -95,15 +95,15 @@
 }
 
 .pill:nth-child(1) {
-  animation-duration: 5s !important;
+  animation-duration: 5s;
 }
 
 .pill:nth-child(2) {
-  animation-duration: 6s !important;
+  animation-duration: 6s ;
 }
 
 .pill:nth-child(3) {
-  animation-duration: 5.5s !important;
+  animation-duration: 5.5s;
 }
 
 @keyframes float-pill {
@@ -896,9 +896,9 @@
 .icon-box.gold-fill {
   background: linear-gradient(135deg,
       #b38900 0%, #ffcc33 45%, #ffffff 50%,
-      #ffcc33 55%, #b38900 100%) !important;
-  background-size: 400% 400% !important;
-  animation: gold-shimmer 6s linear infinite !important;
+      #ffcc33 55%, #b38900 100%);
+  background-size: 400% 400%;
+  animation: gold-shimmer 6s linear infinite;
 }
 
 @keyframes gold-shimmer {
@@ -995,7 +995,7 @@ html.lenis body {
 }
 
 .lenis.lenis-smooth {
-  scroll-behavior: auto !important;
+  scroll-behavior: auto;
 }
 
 .lenis.lenis-smooth [data-lenis-prevent] {
@@ -2967,9 +2967,9 @@ html.lenis body {
   *,
   *::before,
   *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms;
+    animation-iteration-count: 1;
+    transition-duration: 0.01ms;
   }
 }
 
@@ -2981,7 +2981,7 @@ html.lenis body {
 }
 
 .lenis.lenis-smooth {
-  scroll-behavior: auto !important;
+  scroll-behavior: auto;
 }
 
 .lenis.lenis-smooth [data-lenis-prevent] {
@@ -3013,18 +3013,4 @@ html.lenis body {
       src: url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/webfonts/fa-brands-400.woff2') format('woff2');
     }
 
-    @font-face {
-      font-family: 'Inter';
-      src: url("fonts/Inter-Italic.woff2") format('woff2');
-      font-weight: 100 900;
-      font-style: italic;
-      font-display: swap;
-    }
-
-    @font-face {
-      font-family: 'Inter';
-      src: url('fonts/subset-Inter-Regular.woff2') format('woff2');
-      font-weight: 100 900;
-      font-style: normal;
-      font-display: swap;
-    }
+    

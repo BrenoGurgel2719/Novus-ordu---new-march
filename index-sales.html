@@ -91,7 +91,7 @@
       font-display: swap;
       font-style: normal;
       font-weight: 100 900;
-      src: url('fonts/Montserrat-VariableFont_wght.ttf') format('truetype');
+      src: url('fonts/Montserrat-VariableFont_wght.ttf') format('woff2');
     }
 
 
@@ -111,8 +111,6 @@
       font-style: normal;
       font-display: swap;
     }
-
-
 
 
     /* ═══════════════════════════════════════════
@@ -500,21 +498,7 @@
       }
     }
 
-    @font-face {
-      font-family: 'Inter';
-      src: url("fonts/Inter-Italic.woff2") format('woff2');
-      font-weight: 100 900;
-      font-style: italic;
-      font-display: swap;
-    }
 
-    @font-face {
-      font-family: 'Inter';
-      src: url('fonts/subset-Inter-Regular.woff2') format('woff2');
-      font-weight: 100 900;
-      font-style: normal;
-      font-display: swap;
-    }
 
     .hero::after {
       content: "";
@@ -566,20 +550,9 @@
       align-items: center;
       justify-content: center;
       gap: clamp(20px, 4vh, 32px);
-      animation: heroAppear 1.2s cubic-bezier(0.23, 1, 0.32, 1) both;
+     
     }
 
-    @keyframes heroAppear {
-      from {
-        opacity: 0;
-        transform: translateY(40px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
 
     .cta-area-hero {
       display: flex;
@@ -2817,7 +2790,7 @@
   <!-- ═══════════════════════════════════════════
        SCRIPTS — Correct loading order
   ════════════════════════════════════════════ -->
-  <script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js"></script>
+  <script defer src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js"></script>
   <script>
     window.addEventListener("load", () => {
       const isMobile = window.innerWidth <= 768;
