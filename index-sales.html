@@ -2452,7 +2452,7 @@
   <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
   <!-- Lenis: carregado dinamicamente apenas em desktop, sem bloquear o parser HTML -->
   <script>
-    if (window.innerWidth > 768) {
+    if (window.matchMedia('(min-width: 769px)').matches) {
       var _ls = document.createElement('script');
       _ls.src = 'https://unpkg.com/lenis@1.1.18/dist/lenis.min.js';
       _ls.defer = true;
