@@ -56,9 +56,10 @@
   <link rel="preconnect" href="https://unpkg.com" crossorigin>
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 
-  
-  <link rel="preload" href="fonts/subset-Inter-Regular.woff2" as="font" type="font/woff2" crossorigin fetchpriority="high">
-  
+
+  <link rel="preload" href="fonts/subset-Inter-Regular.woff2" as="font" type="font/woff2" crossorigin
+    fetchpriority="high">
+
 
 
   <link rel="preload" href="css/style.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
@@ -91,8 +92,7 @@
   </script>
 
   <style>
-   
-   @font-face {
+    @font-face {
       font-family: 'Inter';
       src: url("fonts/Inter-Italic.woff2") format('woff2');
       font-weight: 100 900;
@@ -161,7 +161,7 @@
       transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
       overflow: hidden;
     }
-    
+
     .nav-container {
       display: flex;
       align-items: center;
@@ -273,7 +273,7 @@
       flex-shrink: 0;
     }
 
-  
+
     /* Hamburguer */
     .nav-toggle {
       display: none;
@@ -399,9 +399,9 @@
 
 
 
-   
 
-   
+
+
 
     /* ═══════════════════════════════════════════
    HERO
@@ -425,10 +425,6 @@
     }
 
 
-
-    
-
-    /* @font-face do Inter declarados uma única vez no início do <style> — duplicatas removidas */
 
     .hero::after {
       content: "";
@@ -462,39 +458,7 @@
       pointer-events: none;
     }
 
-    .hero-container {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      min-height: 50vh;
-      padding: 10px 20px;
-      position: relative;
-      z-index: 2;
-    }
-
-    .content-hero {
-      max-width: 1100px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: clamp(20px, 4vh, 32px);
-      animation: heroAppear 1.2s cubic-bezier(0.23, 1, 0.32, 1) both;
-      will-change: transform; /* promove para camada GPU — evita repaints */
-    }
-
-    /* ⚡ LCP FIX: removido opacity:0 — h1 pintado imediatamente pelo browser.
-       Animação de translateY mantém o efeito visual sem bloquear o LCP. */
-    @keyframes heroAppear {
-      from {
-        transform: translateY(28px);
-      }
-
-      to {
-        transform: translateY(0);
-      }
-    }
+    
 
     .cta-area-hero {
       display: flex;
@@ -2696,7 +2660,8 @@
         <div class="footer-contact-info">
           <p>
             <i class="fas fa-envelope" aria-hidden="true"></i>
-            <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="c5a2b0b7a2a0a9a7b7a0abaaf485a2a8a4aca9eba6aaa8">[email&#160;protected]</a>
+            <a href="/cdn-cgi/l/email-protection" class="__cf_email__"
+              data-cfemail="c5a2b0b7a2a0a9a7b7a0abaaf485a2a8a4aca9eba6aaa8">[email&#160;protected]</a>
           </p>
           <p>
             <i class="fas fa-phone" aria-hidden="true"></i>
@@ -2739,10 +2704,10 @@
       var _ls = document.createElement('script');
       _ls.src = 'https://unpkg.com/lenis@1.1.18/dist/lenis.min.js';
       _ls.defer = true;
-      _ls.onload = function() {
+      _ls.onload = function () {
         var lenis = new Lenis({
           duration: 2,
-          easing: function(t) { return Math.min(1, 1.001 - Math.pow(2, -10 * t)); },
+          easing: function (t) { return Math.min(1, 1.001 - Math.pow(2, -10 * t)); },
           smoothWheel: true
         });
         function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
@@ -2750,7 +2715,7 @@
       };
       document.head.appendChild(_ls);
     }
-    </script>
+  </script>
 
   <!-- countup.js e anime.js: já estavam com defer — correto -->
   <script defer src="https://cdn.jsdelivr.net/npm/countup.js@2.8.0/dist/countUp.umd.js"></script>
