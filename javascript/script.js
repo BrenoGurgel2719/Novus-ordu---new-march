@@ -437,30 +437,6 @@ if (isMobile) {
 }
 
 
-// ─────────────────────────────────────────────
-// 2. HERO BADGE — Category Rotation
-// ─────────────────────────────────────────────
-const initBadgeRotation = () => {
-  const items = document.querySelectorAll('.badge-item');
-  if (!items.length) return;
-
-  let currentIndex = 0;
-
-  setInterval(() => {
-    const currentItem = items[currentIndex];
-
-    currentItem.classList.remove('active');
-    currentItem.classList.add('exit');
-
-    setTimeout(() => {
-      currentItem.classList.remove('exit');
-    }, 600);
-
-    currentIndex = (currentIndex + 1) % items.length;
-    items[currentIndex].classList.add('active');
-  }, 3000);
-};
-
 
 // ─────────────────────────────────────────────
 // 3. ANIME.JS — scroll-triggered section animations
