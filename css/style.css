@@ -67,7 +67,7 @@ main>section {
   font-weight: 700;
   letter-spacing: 4px;
   border-radius: 100px;
-  font-family: 'Montserrat', sans-serif;
+  font-family:  sans-serif;
   overflow: hidden;
   z-index: 1;
   border: 1px solid rgba(243, 230, 51, 0.1);
@@ -129,7 +129,7 @@ main>section {
 }
 
 .novus-concept h2 {
-  font-family: 'Montserrat', sans-serif;
+  font-family: sans-serif;
   font-size: clamp(2rem, 2vw, 3.5rem);
   line-height: 1.1;
   color: var(--text-primary);
@@ -177,7 +177,7 @@ main>section {
   transition: all 0.3s ease;
   cursor: pointer;
   animation: float-pill 4s ease-in-out infinite;
-  font-family: "Montserrat", sans-serif;
+  font-family: sans-serif;
   color: var(--text-primary);
 }
 
@@ -280,7 +280,7 @@ main>section {
 ════════════════════════════════════════════ */
 .services-section {
   padding: 120px 0;
-  font-family: 'Montserrat', sans-serif;
+  font-family: sans-serif;
   color: var(--text-primary);
   overflow: hidden;
 }
@@ -455,7 +455,7 @@ main>section {
   font-weight: 800;
   color: var(--gold);
   letter-spacing: 2px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: sans-serif;
 }
 
 @keyframes scrollTicker {
@@ -503,7 +503,7 @@ main>section {
 ════════════════════════════════════════════ */
 .results-stats {
   padding: clamp(80px, 15vh, 150px) 0;
-  font-family: 'Montserrat', sans-serif;
+  font-family: sans-serif;
   color: var(--text-primary);
   position: relative;
 }
@@ -644,7 +644,7 @@ main>section {
 .cases-section {
   padding: 100px 0;
   position: relative;
-  font-family: 'Montserrat', sans-serif;
+  font-family: sans-serif;
 }
 
 .cases-grid-container {
@@ -865,7 +865,7 @@ main>section {
 .methodology-section {
   padding: clamp(80px, 12vh, 150px) 0;
   color: var(--text-primary);
-  font-family: 'Montserrat', sans-serif;
+  font-family: sans-serif;
   overflow: hidden;
 }
 
@@ -1130,7 +1130,7 @@ html.lenis body {
   padding: clamp(100px, 14vh, 160px) 0 0;
   position: relative;
   overflow: hidden;
-  font-family: 'Montserrat', sans-serif;
+  font-family: sans-serif;
 }
 
 /* Background: isometric grid in SVG inline via CSS */
@@ -1371,7 +1371,7 @@ html.lenis body {
   color: var(--gold);
   letter-spacing: 1px;
   margin-bottom: 20px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: sans-serif;
 }
 
 .sidebar-nav {
@@ -1887,7 +1887,7 @@ html.lenis body {
 ════════════════════════════════════════════ */
 .faq-section {
   padding: clamp(100px, 14vh, 160px) 0;
-  font-family: 'Montserrat', sans-serif;
+  font-family: sans-serif;
   position: relative;
 }
 
@@ -1967,7 +1967,7 @@ html.lenis body {
   gap: 20px;
   padding: 28px 0;
   text-align: left;
-  font-family: 'Montserrat', sans-serif;
+  font-family: sans-serif;
   font-size: clamp(0.95rem, 1.3vw, 1.05rem);
   font-weight: 600;
   color: rgba(255, 255, 255, 0.75);
@@ -2087,7 +2087,7 @@ html.lenis body {
   padding: clamp(100px, 14vh, 160px) 0;
   position: relative;
   overflow: hidden;
-  font-family: 'Montserrat', sans-serif;
+  font-family:  sans-serif;
 }
 
 .cta-bg-glow {
@@ -2363,7 +2363,7 @@ html.lenis body {
   background: linear-gradient(135deg, #ffcc33 0%, #b38900 100%);
   border: none;
   border-radius: 14px;
-  font-family: 'Montserrat', sans-serif;
+  font-family:  sans-serif;
   font-size: 0.9rem;
   font-weight: 800;
   color: #000;
@@ -2540,7 +2540,7 @@ html.lenis body {
   position: relative;
   background: #030303;
   border-top: 1px solid rgba(255, 255, 255, 0.06);
-  font-family: 'Montserrat', sans-serif;
+  font-family:  sans-serif;
   overflow: hidden;
 }
 
@@ -2590,7 +2590,7 @@ html.lenis body {
 }
 
 .footer-logo .logo-text {
-  font-family: 'Montserrat', sans-serif;
+  font-family: sans-serif;
   font-size: 1.1rem;
   font-weight: 400;
   color: rgba(255, 255, 255, 0.8);
