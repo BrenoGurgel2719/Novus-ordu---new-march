@@ -36,10 +36,6 @@ main>section {
   pointer-events: none;
 }
 
-.section-full {
-  display: flex;
-  align-items: center;
-}
 
 .novus-concept,
 .results-stats,
@@ -117,7 +113,6 @@ main>section {
 .novus-concept {
   padding: 120px 20px;
   position: relative;
-  overflow: hidden;
   text-align: center;
 }
 
