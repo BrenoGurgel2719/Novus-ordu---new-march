@@ -55,6 +55,63 @@ main>section {
 }
 
 /* ═══════════════════════════════════════════
+   EYEBROW (reusable component)
+════════════════════════════════════════════ */
+.eyebrow {
+  position: relative;
+  display: inline-block;
+  padding: 8px 20px;
+  background: #080808;
+  color: #cf9f00;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 4px;
+  border-radius: 100px;
+  font-family: 'Montserrat', sans-serif;
+  overflow: hidden;
+  z-index: 1;
+  border: 1px solid rgba(243, 230, 51, 0.1);
+}
+
+.eyebrow::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 200%;
+  height: 200%;
+  transform: translate(-50%, -50%);
+  background: conic-gradient(transparent, transparent, transparent, #cf9f00, transparent 20%);
+  animation: rotateData 4s linear infinite !important;
+  z-index: -2;
+}
+
+.eyebrow::after {
+  content: '';
+  position: absolute;
+  inset: 1px;
+  background: #080808;
+  border-radius: 100px;
+  z-index: -1;
+}
+
+@keyframes rotateData {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+
+  100% {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+.eyebrow:hover::before {
+  animation-duration: 1.5s;
+  filter: brightness(1.5);
+}
+
+
+/* ═══════════════════════════════════════════
    NOVUS CONCEPT
 ════════════════════════════════════════════ */
 .novus-concept {
