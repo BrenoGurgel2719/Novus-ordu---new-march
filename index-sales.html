@@ -140,89 +140,6 @@
       position: relative;
     }
 
-
-
-    /* Accessibility: skip-link for screen readers */
-    .skip-link {
-      position: absolute;
-      top: -100%;
-      left: 1rem;
-      background: var(--gold);
-      color: #000;
-      padding: 8px 16px;
-      border-radius: 4px;
-      font-weight: 700;
-      z-index: 9999;
-      transition: top 0.2s;
-    }
-
-    .skip-link:focus {
-      top: 1rem;
-    }
-
-    /* ═══════════════════════════════════════════
-   LAYOUT BASE
-════════════════════════════════════════════ */
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 20px;
-    }
-
-    main>section {
-      padding: clamp(120px, 15vh, 180px) 0;
-      position: relative;
-    }
-
-    .section-break {
-      height: 12vh;
-      min-height: 120px;
-      pointer-events: none;
-    }
-
-    .section-full {
-      display: flex;
-      align-items: center;
-    }
-
-    .novus-concept,
-    .results-stats,
-    .mockup-section,
-    .cta-section {
-      overflow: hidden;
-    }
-
-    /* content-visibility: auto only on the CTA section (purely static, no scroll-observer animations)
-   Removed from .results-stats and .mockup-section — content-visibility breaks IntersectionObserver
-   in some browsers, causing animateStats and animateMethodology to never trigger. */
-    .cta-section {
-      content-visibility: auto;
-      contain-intrinsic-size: 0 600px;
-    }
-
-    /* ═══════════════════════════════════════════
-   HERO
-════════════════════════════════════════════ */
-    #network-canvas {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 1;
-      pointer-events: none;
-    }
-
-    .hero {
-      position: relative;
-      width: 100%;
-      min-height: 100vh;
-      background-color: var(--bg);
-      display: flex;
-    }
-
-
-
     /* ═══════════════════════════════════════════
          NAVBAR
 ════════════════════════════════════════════ */
@@ -244,9 +161,7 @@
       transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
       overflow: hidden;
     }
-
-
-
+    
     .nav-container {
       display: flex;
       align-items: center;
@@ -355,24 +270,10 @@
       height: 6px;
       background: #000;
       border-radius: 50%;
-      animation: pulse-dot 2s ease-in-out infinite;
       flex-shrink: 0;
     }
 
-    @keyframes pulse-dot {
-
-      0%,
-      100% {
-        transform: scale(1);
-        opacity: 1;
-      }
-
-      50% {
-        transform: scale(1.5);
-        opacity: 0.6;
-      }
-    }
-
+  
     /* Hamburguer */
     .nav-toggle {
       display: none;
@@ -495,6 +396,91 @@
         display: flex;
       }
     }
+
+
+
+    /* Accessibility: skip-link for screen readers */
+    .skip-link {
+      position: absolute;
+      top: -100%;
+      left: 1rem;
+      background: var(--gold);
+      color: #000;
+      padding: 8px 16px;
+      border-radius: 4px;
+      font-weight: 700;
+      z-index: 9999;
+      transition: top 0.2s;
+    }
+
+    .skip-link:focus {
+      top: 1rem;
+    }
+
+    /* ═══════════════════════════════════════════
+   LAYOUT BASE
+════════════════════════════════════════════ */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    main>section {
+      padding: clamp(120px, 15vh, 180px) 0;
+      position: relative;
+    }
+
+    .section-break {
+      height: 12vh;
+      min-height: 120px;
+      pointer-events: none;
+    }
+
+    .section-full {
+      display: flex;
+      align-items: center;
+    }
+
+    .novus-concept,
+    .results-stats,
+    .mockup-section,
+    .cta-section {
+      overflow: hidden;
+    }
+
+    /* content-visibility: auto only on the CTA section (purely static, no scroll-observer animations)
+   Removed from .results-stats and .mockup-section — content-visibility breaks IntersectionObserver
+   in some browsers, causing animateStats and animateMethodology to never trigger. */
+    .cta-section {
+      content-visibility: auto;
+      contain-intrinsic-size: 0 600px;
+    }
+
+    /* ═══════════════════════════════════════════
+   HERO
+════════════════════════════════════════════ */
+    #network-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .hero {
+      position: relative;
+      width: 100%;
+      min-height: 100vh;
+      background-color: var(--bg);
+      display: flex;
+    }
+
+
+
+    
 
     /* @font-face do Inter declarados uma única vez no início do <style> — duplicatas removidas */
 
