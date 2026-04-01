@@ -3,67 +3,79 @@
 ════════════════════════════════════════════════════════════════ */
 
 // ─────────────────────────────────────────────
-// GLOBAL — mobile detection
-// Declared at the top so all modules can use it
+// GLOBAL — device detection (single evaluation)
 // ─────────────────────────────────────────────
 const isMobile = window.matchMedia('(max-width: 767px)').matches;
 const isTablet = window.matchMedia('(max-width: 1024px)').matches;
 
 // ─────────────────────────────────────────────
-// 0. NAVBAR — scroll hide/show + mobile menu
+// UTILITY — shared form validation
+// Applies/clears error borders and returns validity.
+// ─────────────────────────────────────────────
+function validateFields(fields) {
+  let valid = true;
+  fields.forEach(field => {
+    const empty = !field.value.trim();
+    field.style.borderColor = empty ? 'rgba(255,95,86,0.6)' : '';
+    field.style.boxShadow   = empty ? '0 0 0 3px rgba(255,95,86,0.1)' : '';
+    if (empty) {
+      valid = false;
+      field.addEventListener('input', () => {
+        field.style.borderColor = '';
+        field.style.boxShadow   = '';
+      }, { once: true });
+    }
+  });
+  return valid;
+}
+
+// ─────────────────────────────────────────────
+// 0. NAVBAR — active link + mobile menu
 // ─────────────────────────────────────────────
 (function initNavbar() {
-  const navbar  = document.getElementById('navbar');
-  const toggle  = document.getElementById('nav-toggle');
-  const mobileMenu = document.getElementById('mobile-menu');
-  const mobileLinks = document.querySelectorAll('.mobile-link');
-  const sections = document.querySelectorAll('section[id], header[id]');
-  const navLinks = document.querySelectorAll('.nav-link');
+  const navbar      = document.getElementById('navbar');
+  const toggle      = document.getElementById('nav-toggle');
+  const mobileMenu  = document.getElementById('mobile-menu');
+  const navLinks    = document.querySelectorAll('.nav-link');
+  const sections    = document.querySelectorAll('section[id], header[id]');
 
+  // Extracted helper — avoids 3 copies of the same 4 lines
+  function closeMenu() {
+    mobileMenu.classList.remove('open');
+    toggle.classList.remove('open');
+    toggle.setAttribute('aria-expanded', 'false');
+    mobileMenu.setAttribute('aria-hidden', 'true');
+  }
 
-  // — Active link based on visible section. (IntersectionObserver) —
-  const sectionObserver = new IntersectionObserver((entries) => {
+  // Active nav link via IntersectionObserver
+  const sectionObserver = new IntersectionObserver(entries => {
     entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const id = entry.target.getAttribute('id');
-        navLinks.forEach(link => {
-          link.classList.toggle(
-            'active',
-            link.getAttribute('href') === `#${id}`
-          );
-        });
-      }
+      if (!entry.isIntersecting) return;
+      const id = entry.target.id;
+      navLinks.forEach(link =>
+        link.classList.toggle('active', link.getAttribute('href') === `#${id}`)
+      );
     });
   }, { threshold: 0.4 });
 
   sections.forEach(s => sectionObserver.observe(s));
 
-  // — Mobile menu toggle —
+  // Mobile menu toggle
   toggle.addEventListener('click', () => {
     const isOpen = mobileMenu.classList.toggle('open');
     toggle.classList.toggle('open', isOpen);
-    toggle.setAttribute('aria-expanded', isOpen);
-    mobileMenu.setAttribute('aria-hidden', !isOpen);
+    toggle.setAttribute('aria-expanded', String(isOpen));
+    mobileMenu.setAttribute('aria-hidden', String(!isOpen));
   });
 
-  // Close the menu when clicking on a mobile link.
-  mobileLinks.forEach(link => {
-    link.addEventListener('click', () => {
-      mobileMenu.classList.remove('open');
-      toggle.classList.remove('open');
-      toggle.setAttribute('aria-expanded', 'false');
-      mobileMenu.setAttribute('aria-hidden', 'true');
-    });
+  // Close on any mobile link click
+  mobileMenu.addEventListener('click', e => {
+    if (e.target.closest('.mobile-link')) closeMenu();
   });
 
-  //Closes when clicked outside.
-  document.addEventListener('click', (e) => {
-    if (!navbar.contains(e.target)) {
-      mobileMenu.classList.remove('open');
-      toggle.classList.remove('open');
-      toggle.setAttribute('aria-expanded', 'false');
-      mobileMenu.setAttribute('aria-hidden', 'true');
-    }
+  // Close on outside click
+  document.addEventListener('click', e => {
+    if (!navbar.contains(e.target)) closeMenu();
   });
 })();
 
@@ -74,253 +86,81 @@ const yearEl = document.getElementById('footer-year');
 if (yearEl) yearEl.textContent = new Date().getFullYear();
 
 // ─────────────────────────────────────────────
-// 0b2. VSL PLAYER — lazy-load iframe on play click
-//      (Sales Focus variant — index-sales.html only)
-//      Safe to keep in both variants: guards check
-//      for element existence before running.
+// 0c. VSL PLAYER — lazy-load iframe on play click
 // ─────────────────────────────────────────────
 (function initVSL() {
   const playBtn   = document.getElementById('vsl-play-btn');
   const thumbnail = document.getElementById('vsl-thumbnail');
   const iframe    = document.getElementById('vsl-iframe');
-
-  // Exit silently if elements don't exist (index.html)
   if (!playBtn || !iframe) return;
 
   playBtn.addEventListener('click', () => {
-    // Lazy-load: only set iframe src when the user clicks play
-    if (!iframe.src) {
-      iframe.src = iframe.dataset.src;
-    }
+    // Only assign src once — subsequent clicks are no-ops
+    if (!iframe.src) iframe.src = iframe.dataset.src;
     thumbnail.classList.add('hidden');
     iframe.classList.add('active');
     iframe.setAttribute('aria-hidden', 'false');
-  });
+  }, { once: true }); // play can only fire once; detaches after first click
 })();
 
 // ─────────────────────────────────────────────
-// 0b3. LEAD FORM — validation + submission feedback
-//      (Sales Focus variant — index-sales.html only)
+// 0d. LEAD FORM — validation + submission feedback
 // ─────────────────────────────────────────────
 (function initLeadForm() {
   const btn     = document.getElementById('lead-submit-btn');
   const form    = document.querySelector('.lead-form');
   const success = document.getElementById('lead-success');
   const slots   = document.getElementById('slots-count');
-
-  // Exit silently if elements don't exist (index.html)
   if (!btn || !form) return;
 
-  // Simulates slot counter decrementing (urgency effect)
+  // Urgency slot counter — decrements every 45 s
   let count = 3;
   const urgencyInterval = setInterval(() => {
     count = Math.max(1, count - 1);
     if (slots) slots.textContent = count;
     if (count <= 1) clearInterval(urgencyInterval);
-  }, 45000); // decrements every 45s
+  }, 45_000);
 
   btn.addEventListener('click', () => {
-    // Validate required fields
-    const required = form.querySelectorAll('[required]');
-    let valid = true;
+    if (!validateFields([...form.querySelectorAll('[required]')])) return;
 
-    required.forEach(field => {
-      field.style.borderColor = '';
-      if (!field.value.trim()) {
-        field.style.borderColor = 'rgba(255, 95, 86, 0.6)';
-        field.focus();
-        valid = false;
-      }
-    });
-
-    if (!valid) return;
-
-    // Button loading animation
     btn.disabled = true;
-    btn.querySelector('.lead-submit-text').textContent = 'Sending...';
+    btn.querySelector('.lead-submit-text').textContent = 'Sending…';
 
     setTimeout(() => {
-      // Connect to your CRM / webhook here
-      // e.g. fetch('/api/lead', { method: 'POST', body: new FormData(form) })
+      // ↓ Connect your CRM / webhook here:
+      // fetch('/api/lead', { method: 'POST', body: new FormData(form) })
       form.style.display = 'none';
       if (success) success.hidden = false;
-      const header  = document.querySelector('.lead-form-header');
-      const urgency = document.querySelector('.lead-urgency');
-      if (header)  header.style.display  = 'none';
-      if (urgency) urgency.style.display = 'none';
+      document.querySelector('.lead-form-header')?.style.setProperty('display', 'none');
+      document.querySelector('.lead-urgency')?.style.setProperty('display', 'none');
     }, 1200);
   });
-
-  // Reset error border on input
-  form.querySelectorAll('input, select').forEach(field => {
-    field.addEventListener('input', () => {
-      field.style.borderColor = '';
-    });
-  });
 })();
 
 // ─────────────────────────────────────────────
-// ISOMETRIC MOCKUP — input + parallax
+// 0e. CTA FORM — validation + submission feedback
 // ─────────────────────────────────────────────
-(function initMockup() {
-  const wrapper = document.getElementById('iso-wrapper');
-  const stage   = document.getElementById('mockup-stage');
-  if (!wrapper || !stage) return;
-
-  // — Input: animates from "horizontal" state to isometric when entering the viewport —
-  let hasEntered = false;
-
-  // Initial state: no perspective (plan)
-  wrapper.style.transform = `perspective(1400px) rotateX(45deg) rotateZ(-4deg) scale(0.85)`;
-  wrapper.style.opacity   = '0';
-  wrapper.style.transition = 'none';
-
-  const entranceObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting && !hasEntered) {
-        hasEntered = true;
-
-        // A slight delay is needed to ensure the user sees the animation.
-        setTimeout(() => {
-          wrapper.style.transition = 'transform 1.4s cubic-bezier(0.23, 1, 0.32, 1), opacity 1s ease';
-          wrapper.style.opacity = '1';
-          wrapper.style.transform = 'perspective(1400px) rotateX(18deg) rotateZ(-4deg) scale(0.95)';
-        }, 150);
-
-        entranceObserver.disconnect();
-      }
-    });
-  }, { threshold: 0.15 });
-
-  entranceObserver.observe(stage);
-
-  // — Parallax: slight rotation when scrolling the page —
-  // Skipped on mobile to save main thread resources
-  if (!isMobile) {
-    let rafPending = false;
-
-    // FIX: Cache stage position to avoid forced reflow on every scroll tick.
-    // getBoundingClientRect() inside a scroll handler triggers layout — expensive.
-    // ResizeObserver updates the cache only when the element actually resizes.
-    let stageOffsetTop = 0;
-    let stageHeight = 0;
-
-    const updateStageCache = () => {
-      const rect = stage.getBoundingClientRect();
-      stageOffsetTop = rect.top + window.scrollY;
-      stageHeight = rect.height;
-    };
-    updateStageCache();
-    new ResizeObserver(updateStageCache).observe(stage);
-    window.addEventListener('resize', updateStageCache, { passive: true });
-
-    window.addEventListener('scroll', () => {
-      if (!hasEntered || rafPending) return;
-      rafPending = true;
-
-      requestAnimationFrame(() => {
-        // Use pre-cached values — NO forced reflow
-        const viewH    = window.innerHeight;
-        const rectTop  = stageOffsetTop - window.scrollY;
-
-        const progress = (viewH / 2 - (rectTop + stageHeight / 2)) / (viewH * 0.6);
-        const clamped  = Math.max(-1, Math.min(1, progress));
-
-        const rotX  = 18 - clamped * 4;
-        const rotZ  = -4 + clamped * 2;
-        const scale = 0.95 - Math.abs(clamped) * 0.02;
-        wrapper.style.transition = 'none';
-        wrapper.style.transform  =
-          `perspective(1400px) rotateX(${rotX}deg) rotateZ(${rotZ}deg) scale(${scale})`;
-
-        rafPending = false;
-      });
-    }, { passive: true });
-  }
-})();
-// ─────────────────────────────────────────────
-// 0d. FAQ — accessible accordion
-// ─────────────────────────────────────────────
-(function initFaq() {
-  const questions = document.querySelectorAll('.faq-question');
-  if (!questions.length) return;
-
-  questions.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const isOpen   = btn.getAttribute('aria-expanded') === 'true';
-      const answerId = btn.getAttribute('aria-controls');
-      const answer   = document.getElementById(answerId);
-
-      // Close all the others
-      questions.forEach(otherBtn => {
-        if (otherBtn !== btn) {
-          const otherId  = otherBtn.getAttribute('aria-controls');
-          const otherAns = document.getElementById(otherId);
-          otherBtn.setAttribute('aria-expanded', 'false');
-          if (otherAns) {
-            otherAns.classList.remove('open');
-            setTimeout(() => {
-              if (!otherAns.classList.contains('open'))
-                otherAns.setAttribute('hidden', '');
-            }, 450);
-          }
-        }
-      });
-
-      // Toggle current
-      if (isOpen) {
-        btn.setAttribute('aria-expanded', 'false');
-        answer.classList.remove('open');
-        setTimeout(() => answer.setAttribute('hidden', ''), 450);
-      } else {
-        btn.setAttribute('aria-expanded', 'true');
-        answer.removeAttribute('hidden');
-        requestAnimationFrame(() =>
-          requestAnimationFrame(() => answer.classList.add('open'))
-        );
-      }
-    });
-  });
-})();
-
-// ─────────────────────────────────────────────
-//0e. CTA FORM — submission feedback
-// ─────────────────────────────────────────────
-(function initForm() {
+(function initCtaForm() {
   const btn     = document.getElementById('form-submit-btn');
   const form    = btn?.closest('.cta-form');
   const success = document.getElementById('form-success');
   if (!btn || !form || !success) return;
 
   btn.addEventListener('click', () => {
-    const name    = document.getElementById('cta-name');
-    const email   = document.getElementById('cta-email');
-    const empresa = document.getElementById('cta-empresa');
+    const fields = ['cta-name', 'cta-email', 'cta-empresa'].map(id =>
+      document.getElementById(id)
+    );
+    if (!validateFields(fields)) return;
 
-    // Validates required fields.
-    let valid = true;
-    [name, email, empresa].forEach(field => {
-      if (!field.value.trim()) {
-        valid = false;
-        field.style.borderColor = 'rgba(255,95,86,0.6)';
-        field.style.boxShadow   = '0 0 0 3px rgba(255,95,86,0.1)';
-        field.addEventListener('input', () => {
-          field.style.borderColor = '';
-          field.style.boxShadow   = '';
-        }, { once: true });
-      }
-    });
-    if (!valid) return;
-
-    // Loading
     btn.classList.add('loading');
-    btn.querySelector('.submit-text').textContent = 'Enviando';
+    btn.querySelector('.submit-text').textContent = 'Enviando…';
     btn.querySelector('.submit-icon').style.display = 'none';
 
-    //Simulate sending — replace with actual fetch()
+    // ↓ Connect your CRM / webhook here:
+    // fetch('/api/contact', { method: 'POST', body: new FormData(form) })
     setTimeout(() => {
-      form.style.transition = 'opacity 0.4s ease';
-      form.style.opacity    = '0';
+      form.style.cssText += 'transition:opacity .4s ease;opacity:0;';
       setTimeout(() => {
         form.style.display = 'none';
         success.removeAttribute('hidden');
@@ -330,70 +170,113 @@ if (yearEl) yearEl.textContent = new Date().getFullYear();
 })();
 
 // ─────────────────────────────────────────────
-// 1. HERO CANVAS — animated particle network
-//    Mobile optimization: canvas is disabled on
-//    screens < 768px (main FCP bottleneck on mobile)
-//    and runs with fewer points on tablet.
+// 0f. FAQ — accessible accordion
 // ─────────────────────────────────────────────
-const canvas = document.getElementById('network-canvas');
+(function initFaq() {
+  const questions = document.querySelectorAll('.faq-question');
+  if (!questions.length) return;
 
-// Detect mobile — skip canvas entirely to save CPU + FCP time
-if (isMobile) {
-  // Hide canvas on mobile — saves ~60ms of main thread work per frame
-  if (canvas) canvas.style.display = 'none';
-} else {
+  // Pre-map each button → its answer element once (avoids repeated getElementById)
+  const pairs = [...questions].map(btn => ({
+    btn,
+    answer: document.getElementById(btn.getAttribute('aria-controls'))
+  }));
+
+  function closeItem({ btn, answer }) {
+    btn.setAttribute('aria-expanded', 'false');
+    if (!answer) return;
+    answer.classList.remove('open');
+    setTimeout(() => {
+      if (!answer.classList.contains('open')) answer.setAttribute('hidden', '');
+    }, 450);
+  }
+
+  pairs.forEach(current => {
+    current.btn.addEventListener('click', () => {
+      const isOpen = current.btn.getAttribute('aria-expanded') === 'true';
+
+      // Close all others
+      pairs.forEach(pair => { if (pair !== current) closeItem(pair); });
+
+      if (isOpen) {
+        closeItem(current);
+      } else {
+        current.btn.setAttribute('aria-expanded', 'true');
+        current.answer.removeAttribute('hidden');
+        // Double rAF ensures the browser paints the un-hidden state
+        // before adding the class, which allows the CSS transition to run.
+        requestAnimationFrame(() =>
+          requestAnimationFrame(() => current.answer.classList.add('open'))
+        );
+      }
+    });
+  });
+})();
+
+// ─────────────────────────────────────────────
+// 1. HERO CANVAS — animated particle network
+//    Disabled on mobile to protect FCP and CPU.
+//    Pauses automatically when the tab is hidden.
+// ─────────────────────────────────────────────
+(function initCanvas() {
+  const canvas = document.getElementById('network-canvas');
+  if (!canvas) return;
+
+  if (isMobile) { canvas.style.display = 'none'; return; }
+
   const ctx = canvas.getContext('2d');
-
-  let points = [];
-  let mouse  = { x: null, y: null };
-
-  // Fewer points on tablet vs desktop for better performance
   const POINT_COUNT    = isTablet ? 40 : 80;
   const CONNECTION_DIST = isTablet ? 120 : 160;
   const MOUSE_DIST     = 200;
 
-  let resizeTimer;
-  function initCanvas() {
+  // Constant string — defined once, not rebuilt every frame
+  const GOLD = '179, 137, 0';
+
+  let points = [];
+  let mouse  = { x: null, y: null };
+  let rafId  = null;
+  let running = true;
+
+  function initPoints() {
     canvas.width  = window.innerWidth;
     canvas.height = window.innerHeight;
-    points = [];
-
-    for (let i = 0; i < POINT_COUNT; i++) {
-      points.push({
-        x:      Math.random() * canvas.width,
-        y:      Math.random() * canvas.height,
-        vx:     (Math.random() - 0.5) * 0.4,
-        vy:     (Math.random() - 0.5) * 0.4,
-        radius: Math.random() * 1.5 + 1
-      });
-    }
+    points = Array.from({ length: POINT_COUNT }, () => ({
+      x:      Math.random() * canvas.width,
+      y:      Math.random() * canvas.height,
+      vx:     (Math.random() - 0.5) * 0.4,
+      vy:     (Math.random() - 0.5) * 0.4,
+      radius: Math.random() * 1.5 + 1
+    }));
   }
 
   function draw() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    const colorGold = '179, 137, 0';
+    if (!running) return;
+    rafId = requestAnimationFrame(draw);
 
-    points.forEach((p, i) => {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    for (let i = 0; i < points.length; i++) {
+      const p = points[i];
       p.x += p.vx;
       p.y += p.vy;
-
       if (p.x < 0 || p.x > canvas.width)  p.vx *= -1;
       if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
 
       ctx.beginPath();
       ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(${colorGold}, 0.5)`;
+      ctx.fillStyle = `rgba(${GOLD},0.5)`;
       ctx.fill();
 
       for (let j = i + 1; j < points.length; j++) {
         const p2   = points[j];
-        const dist = Math.hypot(p.x - p2.x, p.y - p2.y);
+        const dx   = p.x - p2.x;
+        const dy   = p.y - p2.y;
+        const dist = Math.sqrt(dx * dx + dy * dy); // faster than hypot in hot loops
 
         if (dist < CONNECTION_DIST) {
-          const opacity = 1 - (dist / CONNECTION_DIST);
           ctx.beginPath();
           ctx.lineWidth   = 0.5;
-          ctx.strokeStyle = `rgba(${colorGold}, ${opacity * 0.2})`;
+          ctx.strokeStyle = `rgba(${GOLD},${(1 - dist / CONNECTION_DIST) * 0.2})`;
           ctx.moveTo(p.x, p.y);
           ctx.lineTo(p2.x, p2.y);
           ctx.stroke();
@@ -401,187 +284,223 @@ if (isMobile) {
       }
 
       if (mouse.x !== null) {
-        const mDist = Math.hypot(p.x - mouse.x, p.y - mouse.y);
+        const mdx  = p.x - mouse.x;
+        const mdy  = p.y - mouse.y;
+        const mDist = Math.sqrt(mdx * mdx + mdy * mdy);
         if (mDist < MOUSE_DIST) {
-          const mOpacity = 1 - (mDist / MOUSE_DIST);
           ctx.beginPath();
           ctx.lineWidth   = 0.8;
-          ctx.strokeStyle = `rgba(${colorGold}, ${mOpacity * 0.4})`;
+          ctx.strokeStyle = `rgba(${GOLD},${(1 - mDist / MOUSE_DIST) * 0.4})`;
           ctx.moveTo(p.x, p.y);
           ctx.lineTo(mouse.x, mouse.y);
           ctx.stroke();
         }
       }
-    });
-
-    requestAnimationFrame(draw);
+    }
   }
 
-  window.addEventListener('resize', () => {
-    clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(initCanvas, 150);
+  // Pause loop when tab is hidden — saves CPU when user switches tabs
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+      running = false;
+      cancelAnimationFrame(rafId);
+    } else {
+      running = true;
+      draw();
+    }
   });
 
-  window.addEventListener('mousemove', (e) => {
+  let resizeTimer;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(initPoints, 150);
+  }, { passive: true });
+
+  window.addEventListener('mousemove', e => {
     mouse.x = e.clientX;
     mouse.y = e.clientY;
-  });
+  }, { passive: true });
 
   window.addEventListener('mouseout', () => {
     mouse.x = null;
     mouse.y = null;
-  });
+  }, { passive: true });
 
-  initCanvas();
+  initPoints();
   draw();
-}
-
-
-
+})();
 
 // ─────────────────────────────────────────────
-// 3. ANIME.JS — scroll-triggered section animations
-// NOTE: `defer` scripts run after DOM is parsed,
-// so DOMContentLoaded has already fired by the time
-// this script executes. We use an IIFE instead.
+// 2. ISOMETRIC MOCKUP — entrance + scroll parallax
+// ─────────────────────────────────────────────
+(function initMockup() {
+  const wrapper = document.getElementById('iso-wrapper');
+  const stage   = document.getElementById('mockup-stage');
+  if (!wrapper || !stage) return;
+
+  let hasEntered = false;
+
+  wrapper.style.cssText += 'transform:perspective(1400px) rotateX(45deg) rotateZ(-4deg) scale(0.85);opacity:0;transition:none;';
+
+  const entranceObserver = new IntersectionObserver(entries => {
+    if (!entries[0].isIntersecting || hasEntered) return;
+    hasEntered = true;
+
+    setTimeout(() => {
+      wrapper.style.transition = 'transform 1.4s cubic-bezier(0.23,1,0.32,1), opacity 1s ease';
+      wrapper.style.opacity    = '1';
+      wrapper.style.transform  = 'perspective(1400px) rotateX(18deg) rotateZ(-4deg) scale(0.95)';
+    }, 150);
+
+    entranceObserver.disconnect();
+  }, { threshold: 0.15 });
+
+  entranceObserver.observe(stage);
+
+  if (isMobile) return; // skip parallax on mobile
+
+  let rafPending = false;
+  let stageTop = 0;
+  let stageH   = 0;
+
+  const updateCache = () => {
+    const r = stage.getBoundingClientRect();
+    stageTop = r.top + window.scrollY;
+    stageH   = r.height;
+  };
+  updateCache();
+
+  const ro = new ResizeObserver(updateCache);
+  ro.observe(stage);
+  window.addEventListener('resize', updateCache, { passive: true });
+
+  window.addEventListener('scroll', () => {
+    if (!hasEntered || rafPending) return;
+    rafPending = true;
+
+    requestAnimationFrame(() => {
+      const viewH    = window.innerHeight;
+      const rectTop  = stageTop - window.scrollY;
+      const progress = (viewH / 2 - (rectTop + stageH / 2)) / (viewH * 0.6);
+      const clamped  = Math.max(-1, Math.min(1, progress));
+
+      wrapper.style.transition = 'none';
+      wrapper.style.transform  =
+        `perspective(1400px) rotateX(${18 - clamped * 4}deg) rotateZ(${-4 + clamped * 2}deg) scale(${0.95 - Math.abs(clamped) * 0.02})`;
+
+      rafPending = false;
+    });
+  }, { passive: true });
+})();
+
+// ─────────────────────────────────────────────
+// 3. SCROLL ANIMATIONS — anime.js
 // ─────────────────────────────────────────────
 (function initAnimations() {
-
-  // Main observer of sections
-  const scrollObserver = new IntersectionObserver((entries) => {
+  const scrollObserver = new IntersectionObserver(entries => {
     entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const target = entry.target;
+      if (!entry.isIntersecting) return;
+      const t = entry.target;
 
-        // Each animation is wrapped in try/catch so a failure in one
-        // section never silences the others in the same callback tick.
-        try { if (target.classList.contains('novus-concept'))       animateConcept(target);     } catch(e) { console.warn('animateConcept error', e); }
-        try { if (target.classList.contains('services-section'))    animateServices(target);    } catch(e) { console.warn('animateServices error', e); }
-        try { if (target.classList.contains('results-stats'))       animateStats(target);       } catch(e) { console.warn('animateStats error', e); }
-        try { if (target.classList.contains('methodology-section')) animateMethodology(target); } catch(e) { console.warn('animateMethodology error', e); }
+      try { if (t.classList.contains('novus-concept'))       animateConcept(t);     } catch(e) { console.warn('animateConcept', e); }
+      try { if (t.classList.contains('services-section'))    animateServices(t);    } catch(e) { console.warn('animateServices', e); }
+      try { if (t.classList.contains('results-stats'))       animateStats(t);       } catch(e) { console.warn('animateStats', e); }
+      try { if (t.classList.contains('methodology-section')) animateMethodology(t); } catch(e) { console.warn('animateMethodology', e); }
 
-        scrollObserver.unobserve(target);
-      }
+      scrollObserver.unobserve(t);
     });
   }, { threshold: 0.15 });
 
-  document.querySelectorAll('section').forEach(section => {
-    scrollObserver.observe(section);
-  });
+  document.querySelectorAll('section').forEach(s => scrollObserver.observe(s));
 
-
-  // ── Concept ──────────────────────────────
   function animateConcept(section) {
     anime.timeline({ easing: 'easeOutExpo' })
       .add({
-        targets: section.querySelectorAll('.reveal-up'),
+        targets:  section.querySelectorAll('.reveal-up'),
         translateY: [40, 0],
-        opacity: [0, 1],
-        duration: 1200,
-        delay: anime.stagger(200)
+        opacity:    [0, 1],
+        duration:   1200,
+        delay:      anime.stagger(200)
       })
       .add({
-        targets: section.querySelectorAll('.pill'),
+        targets:  section.querySelectorAll('.pill'),
         translateX: [50, 0],
-        opacity: [0, 1],
-        duration: 1000,
-        delay: anime.stagger(150),
+        opacity:    [0, 1],
+        duration:   1000,
+        delay:      anime.stagger(150)
       }, '-=800');
   }
 
-
-  // ── Services ─────────────────────────────
   function animateServices(section) {
     anime({
-      targets: section.querySelectorAll('.service-card'),
+      targets:    section.querySelectorAll('.service-card'),
       translateY: [60, 0],
-      scale: [0.9, 1],
-      opacity: [0, 1],
-      delay: anime.stagger(200),
-      duration: 1500,
-      easing: 'easeOutElastic(1, .8)'
+      scale:      [0.9, 1],
+      opacity:    [0, 1],
+      delay:      anime.stagger(200),
+      duration:   1500,
+      easing:     'easeOutElastic(1, .8)'
     });
   }
 
-
-  // ──Statistics ─────────────────────────
-  // FIX: CountUp is now triggered ONCE, inside this box, after the cards animate.
-  //     The old statsObserver was REMOVED to avoid duplicating the animation.
   function animateStats(section) {
     anime({
-      targets: section.querySelectorAll('.stat-card'),
-      opacity: [0, 1],
+      targets:    section.querySelectorAll('.stat-card'),
+      opacity:    [0, 1],
       translateY: [30, 0],
-      duration: 1000,
-      delay: anime.stagger(100),
-      easing: 'easeOutQuad',
-      complete: () => {
+      duration:   1000,
+      delay:      anime.stagger(100),
+      easing:     'easeOutQuad',
+      complete() {
         section.querySelectorAll('.stat-card').forEach(card => {
-          card.classList.add('active'); // Maintains compatibility with CSS.reveal.active
-
+          card.classList.add('active');
           const num = card.querySelector('.num-value');
           if (num && !num.dataset.done) {
             animateNumber(num);
-            num.dataset.done = "true";
+            num.dataset.done = '1';
           }
         });
       }
     });
   }
 
-
-  // ── Methodology ──────────────────────────
   function animateMethodology(section) {
-    const track = section.querySelector('.track-progress');
-
     anime.timeline({ easing: 'easeOutQuad' })
       .add({
-        targets: track,
-        width: ['0%', '100%'],
+        targets:  section.querySelector('.track-progress'),
+        width:    ['0%', '100%'],
         duration: 2000,
-        easing: 'easeInOutQuad'
+        easing:   'easeInOutQuad'
       })
       .add({
-        targets: section.querySelectorAll('.method-item'),
+        targets:    section.querySelectorAll('.method-item'),
         translateY: [40, 0],
-        opacity: [0, 1],
-        delay: anime.stagger(200),
-        duration: 1000
+        opacity:    [0, 1],
+        delay:      anime.stagger(200),
+        duration:   1000
       }, '-=1500');
   }
 })();
 
-
 // ─────────────────────────────────────────────
-// 4.COUNTUP — Reusable function
-//   FIX: renamed from animatenumber → animateNumber (correct camelCase)
+// 4. COUNTUP — reusable number animation
 // ─────────────────────────────────────────────
-function animateNumber(numElement) {
-  // Guard: if countUp failed to load, fall back to displaying the raw target value
+function animateNumber(el) {
   if (typeof countUp === 'undefined') {
-    const suffix = numElement.dataset.suffix || '';
-    numElement.textContent = numElement.dataset.target + suffix;
+    el.textContent = el.dataset.target + (el.dataset.suffix || '');
     console.warn('countUp not loaded — displaying static value.');
     return;
   }
 
-  const target = +numElement.dataset.target;
-  const suffix = numElement.dataset.suffix || ''; // e.g. "K", "B", "%"
-
-  const options = {
-    duration: 3,
-    useEasing: true,
+  const counter = new countUp.CountUp(el, +el.dataset.target, {
+    duration:    3,
+    useEasing:   true,
     useGrouping: true,
-    separator: '.',
-    decimal: ',',
-    suffix: suffix,
-  };
+    separator:   '.',
+    decimal:     ',',
+    suffix:      el.dataset.suffix || ''
+  });
 
-  const counter = new countUp.CountUp(numElement, target, options);
-
-  if (!counter.error) {
-    counter.start();
-  } else {
-    console.warn('CountUp error:', counter.error);
-  }
+  if (!counter.error) counter.start();
+  else console.warn('CountUp error:', counter.error);
 }
