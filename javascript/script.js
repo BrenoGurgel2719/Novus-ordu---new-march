@@ -17,12 +17,12 @@ function validateFields(fields) {
   fields.forEach(field => {
     const empty = !field.value.trim();
     field.style.borderColor = empty ? 'rgba(255,95,86,0.6)' : '';
-    field.style.boxShadow   = empty ? '0 0 0 3px rgba(255,95,86,0.1)' : '';
+    field.style.boxShadow = empty ? '0 0 0 3px rgba(255,95,86,0.1)' : '';
     if (empty) {
       valid = false;
       field.addEventListener('input', () => {
         field.style.borderColor = '';
-        field.style.boxShadow   = '';
+        field.style.boxShadow = '';
       }, { once: true });
     }
   });
@@ -33,11 +33,11 @@ function validateFields(fields) {
 // 0. NAVBAR — active link + mobile menu
 // ─────────────────────────────────────────────
 (function initNavbar() {
-  const navbar      = document.getElementById('navbar');
-  const toggle      = document.getElementById('nav-toggle');
-  const mobileMenu  = document.getElementById('mobile-menu');
-  const navLinks    = document.querySelectorAll('.nav-link');
-  const sections    = document.querySelectorAll('section[id], header[id]');
+  const navbar = document.getElementById('navbar');
+  const toggle = document.getElementById('nav-toggle');
+  const mobileMenu = document.getElementById('mobile-menu');
+  const navLinks = document.querySelectorAll('.nav-link');
+  const sections = document.querySelectorAll('section[id], header[id]');
 
   // Extracted helper — avoids 3 copies of the same 4 lines
   function closeMenu() {
@@ -89,9 +89,9 @@ if (yearEl) yearEl.textContent = new Date().getFullYear();
 // 0c. VSL PLAYER — lazy-load iframe on play click
 // ─────────────────────────────────────────────
 (function initVSL() {
-  const playBtn   = document.getElementById('vsl-play-btn');
+  const playBtn = document.getElementById('vsl-play-btn');
   const thumbnail = document.getElementById('vsl-thumbnail');
-  const iframe    = document.getElementById('vsl-iframe');
+  const iframe = document.getElementById('vsl-iframe');
   if (!playBtn || !iframe) return;
 
   playBtn.addEventListener('click', () => {
@@ -107,10 +107,10 @@ if (yearEl) yearEl.textContent = new Date().getFullYear();
 // 0d. LEAD FORM — validation + submission feedback
 // ─────────────────────────────────────────────
 (function initLeadForm() {
-  const btn     = document.getElementById('lead-submit-btn');
-  const form    = document.querySelector('.lead-form');
+  const btn = document.getElementById('lead-submit-btn');
+  const form = document.querySelector('.lead-form');
   const success = document.getElementById('lead-success');
-  const slots   = document.getElementById('slots-count');
+  const slots = document.getElementById('slots-count');
   if (!btn || !form) return;
 
   // Urgency slot counter — decrements every 45 s
@@ -142,8 +142,8 @@ if (yearEl) yearEl.textContent = new Date().getFullYear();
 // 0e. CTA FORM — validation + submission feedback
 // ─────────────────────────────────────────────
 (function initCtaForm() {
-  const btn     = document.getElementById('form-submit-btn');
-  const form    = btn?.closest('.cta-form');
+  const btn = document.getElementById('form-submit-btn');
+  const form = btn?.closest('.cta-form');
   const success = document.getElementById('form-success');
   if (!btn || !form || !success) return;
 
@@ -225,26 +225,26 @@ if (yearEl) yearEl.textContent = new Date().getFullYear();
   if (isMobile) { canvas.style.display = 'none'; return; }
 
   const ctx = canvas.getContext('2d');
-  const POINT_COUNT    = isTablet ? 40 : 80;
+  const POINT_COUNT = isTablet ? 40 : 80;
   const CONNECTION_DIST = isTablet ? 120 : 160;
-  const MOUSE_DIST     = 200;
+  const MOUSE_DIST = 200;
 
   // Constant string — defined once, not rebuilt every frame
   const GOLD = '179, 137, 0';
 
   let points = [];
-  let mouse  = { x: null, y: null };
-  let rafId  = null;
+  let mouse = { x: null, y: null };
+  let rafId = null;
   let running = true;
 
   function initPoints() {
-    canvas.width  = window.innerWidth;
+    canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
     points = Array.from({ length: POINT_COUNT }, () => ({
-      x:      Math.random() * canvas.width,
-      y:      Math.random() * canvas.height,
-      vx:     (Math.random() - 0.5) * 0.4,
-      vy:     (Math.random() - 0.5) * 0.4,
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      vx: (Math.random() - 0.5) * 0.4,
+      vy: (Math.random() - 0.5) * 0.4,
       radius: Math.random() * 1.5 + 1
     }));
   }
@@ -259,7 +259,7 @@ if (yearEl) yearEl.textContent = new Date().getFullYear();
       const p = points[i];
       p.x += p.vx;
       p.y += p.vy;
-      if (p.x < 0 || p.x > canvas.width)  p.vx *= -1;
+      if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
       if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
 
       ctx.beginPath();
@@ -268,14 +268,14 @@ if (yearEl) yearEl.textContent = new Date().getFullYear();
       ctx.fill();
 
       for (let j = i + 1; j < points.length; j++) {
-        const p2   = points[j];
-        const dx   = p.x - p2.x;
-        const dy   = p.y - p2.y;
+        const p2 = points[j];
+        const dx = p.x - p2.x;
+        const dy = p.y - p2.y;
         const dist = Math.sqrt(dx * dx + dy * dy); // faster than hypot in hot loops
 
         if (dist < CONNECTION_DIST) {
           ctx.beginPath();
-          ctx.lineWidth   = 0.5;
+          ctx.lineWidth = 0.5;
           ctx.strokeStyle = `rgba(${GOLD},${(1 - dist / CONNECTION_DIST) * 0.2})`;
           ctx.moveTo(p.x, p.y);
           ctx.lineTo(p2.x, p2.y);
@@ -284,12 +284,12 @@ if (yearEl) yearEl.textContent = new Date().getFullYear();
       }
 
       if (mouse.x !== null) {
-        const mdx  = p.x - mouse.x;
-        const mdy  = p.y - mouse.y;
+        const mdx = p.x - mouse.x;
+        const mdy = p.y - mouse.y;
         const mDist = Math.sqrt(mdx * mdx + mdy * mdy);
         if (mDist < MOUSE_DIST) {
           ctx.beginPath();
-          ctx.lineWidth   = 0.8;
+          ctx.lineWidth = 0.8;
           ctx.strokeStyle = `rgba(${GOLD},${(1 - mDist / MOUSE_DIST) * 0.4})`;
           ctx.moveTo(p.x, p.y);
           ctx.lineTo(mouse.x, mouse.y);
@@ -335,7 +335,7 @@ if (yearEl) yearEl.textContent = new Date().getFullYear();
 // ─────────────────────────────────────────────
 (function initMockup() {
   const wrapper = document.getElementById('iso-wrapper');
-  const stage   = document.getElementById('mockup-stage');
+  const stage = document.getElementById('mockup-stage');
   if (!wrapper || !stage) return;
 
   let hasEntered = false;
@@ -348,8 +348,8 @@ if (yearEl) yearEl.textContent = new Date().getFullYear();
 
     setTimeout(() => {
       wrapper.style.transition = 'transform 1.4s cubic-bezier(0.23,1,0.32,1), opacity 1s ease';
-      wrapper.style.opacity    = '1';
-      wrapper.style.transform  = 'perspective(1400px) rotateX(18deg) rotateZ(-4deg) scale(0.95)';
+      wrapper.style.opacity = '1';
+      wrapper.style.transform = 'perspective(1400px) rotateX(18deg) rotateZ(-4deg) scale(0.95)';
     }, 150);
 
     entranceObserver.disconnect();
@@ -361,12 +361,12 @@ if (yearEl) yearEl.textContent = new Date().getFullYear();
 
   let rafPending = false;
   let stageTop = 0;
-  let stageH   = 0;
+  let stageH = 0;
 
   const updateCache = () => {
     const r = stage.getBoundingClientRect();
     stageTop = r.top + window.scrollY;
-    stageH   = r.height;
+    stageH = r.height;
   };
   updateCache();
 
@@ -379,13 +379,13 @@ if (yearEl) yearEl.textContent = new Date().getFullYear();
     rafPending = true;
 
     requestAnimationFrame(() => {
-      const viewH    = window.innerHeight;
-      const rectTop  = stageTop - window.scrollY;
+      const viewH = window.innerHeight;
+      const rectTop = stageTop - window.scrollY;
       const progress = (viewH / 2 - (rectTop + stageH / 2)) / (viewH * 0.6);
-      const clamped  = Math.max(-1, Math.min(1, progress));
+      const clamped = Math.max(-1, Math.min(1, progress));
 
       wrapper.style.transition = 'none';
-      wrapper.style.transform  =
+      wrapper.style.transform =
         `perspective(1400px) rotateX(${18 - clamped * 4}deg) rotateZ(${-4 + clamped * 2}deg) scale(${0.95 - Math.abs(clamped) * 0.02})`;
 
       rafPending = false;
@@ -402,55 +402,73 @@ if (yearEl) yearEl.textContent = new Date().getFullYear();
       if (!entry.isIntersecting) return;
       const t = entry.target;
 
-      try { if (t.classList.contains('novus-concept'))       animateConcept(t);     } catch(e) { console.warn('animateConcept', e); }
-      try { if (t.classList.contains('services-section'))    animateServices(t);    } catch(e) { console.warn('animateServices', e); }
-      try { if (t.classList.contains('results-stats'))       animateStats(t);       } catch(e) { console.warn('animateStats', e); }
-      try { if (t.classList.contains('methodology-section')) animateMethodology(t); } catch(e) { console.warn('animateMethodology', e); }
+      try { if (t.classList.contains('novus-concept')) animateConcept(t); } catch (e) { console.warn('animateConcept', e); }
+      try { if (t.classList.contains('services-section')) animateServices(t); } catch (e) { console.warn('animateServices', e); }
+      try { if (t.classList.contains('results-stats')) animateStats(t); } catch (e) { console.warn('animateStats', e); }
+      try { if (t.classList.contains('methodology-section')) animateMethodology(t); } catch (e) { console.warn('animateMethodology', e); }
 
       scrollObserver.unobserve(t);
     });
-  }, { threshold: 0.15 });
+  }, { threshold: 0.35 });
 
   document.querySelectorAll('section').forEach(s => scrollObserver.observe(s));
 
   function animateConcept(section) {
     anime.timeline({ easing: 'easeOutExpo' })
       .add({
-        targets:  section.querySelectorAll('.reveal-up'),
+        targets: section.querySelectorAll('.reveal-up'),
         translateY: [40, 0],
-        opacity:    [0, 1],
-        duration:   1200,
-        delay:      anime.stagger(200)
+        opacity: [0, 1],
+        duration: 1200,
+        delay: anime.stagger(200)
       })
       .add({
-        targets:  section.querySelectorAll('.pill'),
+        targets: section.querySelectorAll('.pill'),
         translateX: [50, 0],
-        opacity:    [0, 1],
-        duration:   1000,
-        delay:      anime.stagger(150)
+        opacity: [0, 1],
+        duration: 1000,
+        delay: anime.stagger(150)
       }, '-=800');
   }
 
   function animateServices(section) {
+
+    // 1. Activates all CSS SVG animations
+    section.classList.add('svc-animated');
+
+    // 2. Reveal cards column (was opacity:0)
+    const cardsCol = section.querySelector('.svc-cards-col');
+    if (cardsCol) cardsCol.style.opacity = '1';
+
+    // 3. Cards entrance: slide up + fade in, staggered
     anime({
-      targets:    section.querySelectorAll('.service-card'),
-      translateY: [60, 0],
-      scale:      [0.9, 1],
-      opacity:    [0, 1],
-      delay:      anime.stagger(200),
-      duration:   1500,
-      easing:     'easeOutElastic(1, .8)'
+      targets: section.querySelectorAll('.svc-card'),
+      translateY: [28, 0],
+      opacity: [0, 1],
+      delay: anime.stagger(75),
+      duration: 900,
+      easing: 'easeOutExpo'
+    });
+
+    // 4. Promise items entrance: slide from right + fade in
+    anime({
+      targets: section.querySelectorAll('.promise-item'),
+      translateX: [20, 0],
+      opacity: [0, 1],
+      delay: anime.stagger(110, { start: 180 }),
+      duration: 750,
+      easing: 'easeOutExpo'
     });
   }
 
   function animateStats(section) {
     anime({
-      targets:    section.querySelectorAll('.stat-card'),
-      opacity:    [0, 1],
+      targets: section.querySelectorAll('.stat-card'),
+      opacity: [0, 1],
       translateY: [30, 0],
-      duration:   1000,
-      delay:      anime.stagger(100),
-      easing:     'easeOutQuad',
+      duration: 1000,
+      delay: anime.stagger(100),
+      easing: 'easeOutQuad',
       complete() {
         section.querySelectorAll('.stat-card').forEach(card => {
           card.classList.add('active');
@@ -467,17 +485,17 @@ if (yearEl) yearEl.textContent = new Date().getFullYear();
   function animateMethodology(section) {
     anime.timeline({ easing: 'easeOutQuad' })
       .add({
-        targets:  section.querySelector('.track-progress'),
-        width:    ['0%', '100%'],
+        targets: section.querySelector('.track-progress'),
+        width: ['0%', '100%'],
         duration: 2000,
-        easing:   'easeInOutQuad'
+        easing: 'easeInOutQuad'
       })
       .add({
-        targets:    section.querySelectorAll('.method-item'),
+        targets: section.querySelectorAll('.method-item'),
         translateY: [40, 0],
-        opacity:    [0, 1],
-        delay:      anime.stagger(200),
-        duration:   1000
+        opacity: [0, 1],
+        delay: anime.stagger(200),
+        duration: 1000
       }, '-=1500');
   }
 })();
@@ -493,12 +511,12 @@ function animateNumber(el) {
   }
 
   const counter = new countUp.CountUp(el, +el.dataset.target, {
-    duration:    3,
-    useEasing:   true,
+    duration: 3,
+    useEasing: true,
     useGrouping: true,
-    separator:   '.',
-    decimal:     ',',
-    suffix:      el.dataset.suffix || ''
+    separator: '.',
+    decimal: ',',
+    suffix: el.dataset.suffix || ''
   });
 
   if (!counter.error) counter.start();
