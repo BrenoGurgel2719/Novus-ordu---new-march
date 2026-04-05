@@ -522,3 +522,4 @@ function animateNumber(el) {
   if (!counter.error) counter.start();
   else console.warn('CountUp error:', counter.error);
 }
+
