@@ -1105,33 +1105,9 @@ main>section {
 /* ═══════════════════════════════════════════
    SUCCESS STORIES — 3D Carousel
 ════════════════════════════════════════════ */
-.cases-section {
-  padding: clamp(100px, 14vh, 160px) 0 clamp(60px, 8vh, 100px);
-  position: relative;
-  font-family: sans-serif;
-}
 
-/* ── Section header ── */
-.cases-header {
-  text-align: center;
-  margin-bottom: 64px;
-}
 
-.cases-header h2 {
-  font-size: clamp(2.2rem, 3.5vw, 3.8rem);
-  font-weight: 800;
-  line-height: 1.1;
-  margin: 16px 0 14px;
-}
 
-.cases-header>p {
-  font-family: 'Inter', 'Inter Fallback', sans-serif;
-  font-size: clamp(0.88rem, 1.2vw, 1rem);
-  color: var(--text-muted);
-  max-width: 460px;
-  margin: 0 auto;
-  line-height: 1.65;
-}
 
 
 

@@ -523,3 +523,5 @@ function animateNumber(el) {
   else console.warn('CountUp error:', counter.error);
 }
 
+
+
