@@ -978,8 +978,12 @@ main>section {
 }
 
 .results-header h2 {
+  font-family: sans-serif;
   font-size: clamp(2rem, 2vw, 3.5rem);
+  line-height: 1.1;
+  color: var(--text-primary);
   font-weight: 800;
+  margin-bottom: 50px;
 }
 
 .results-header p {
