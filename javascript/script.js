@@ -403,6 +403,7 @@ if (yearEl) yearEl.textContent = new Date().getFullYear();
       const t = entry.target;
 
       try { if (t.classList.contains('novus-concept')) animateConcept(t); } catch (e) { console.warn('animateConcept', e); }
+      try { if (t.classList.contains('cases-section')) animateCases(t); } catch (e) { console.warn('animateCases', e); }
       try { if (t.classList.contains('services-section')) animateServices(t); } catch (e) { console.warn('animateServices', e); }
       try { if (t.classList.contains('results-stats')) animateStats(t); } catch (e) { console.warn('animateStats', e); }
       try { if (t.classList.contains('methodology-section')) animateMethodology(t); } catch (e) { console.warn('animateMethodology', e); }
@@ -430,6 +431,24 @@ if (yearEl) yearEl.textContent = new Date().getFullYear();
         delay: anime.stagger(150)
       }, '-=800');
   }
+
+  function animateCases(section) {
+  anime.timeline({ easing: 'easeOutExpo' })
+    .add({
+      targets: section.querySelectorAll('.reveal-up'),
+      translateY: [40, 0],
+      opacity: [0, 1],
+      duration: 1000,
+      delay: anime.stagger(150)
+    })
+    .add({
+      targets: section.querySelectorAll('.case-reveal'),
+      translateY: [40, 0],
+      opacity: [0, 1],
+      duration: 1000,
+      delay: anime.stagger(200) // Efeito cascata lindo nos 3 cards
+    }, '-=600');
+}
 
   function animateServices(section) {
 

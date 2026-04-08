@@ -1329,6 +1329,231 @@ main>section {
 ════════════════════════════════════════════ */
 
 
+.cases-section {
+  padding: clamp(100px, 15vh, 160px) 0;
+  position: relative;
+  font-family: sans-serif;
+  color: var(--text-primary);
+  overflow: hidden;
+}
+
+.cases-bg-glow {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: clamp(400px, 60vw, 800px);
+  height: clamp(300px, 50vw, 600px);
+  background: radial-gradient(ellipse at center, rgba(179, 137, 0, 0.06) 0%, transparent 70%);
+  filter: blur(80px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.cases-section .container {
+  position: relative;
+  z-index: 2;
+}
+
+.cases-header {
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto 50px;
+}
+
+.cases-header h2 {
+  font-size: clamp(2rem, 3vw, 3.5rem);
+  font-weight: 800;
+  line-height: 1.1;
+  margin: 20px 0;
+  letter-spacing: -0.02em;
+}
+
+.cases-header p {
+  font-size: clamp(0.95rem, 1.2vw, 1.1rem);
+  color: var(--text-muted);
+  line-height: 1.7;
+  font-weight: 300;
+  max-width: 650px;
+  margin: 0 auto;
+}
+
+/* Metric Banner */
+.case-metrics-banner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(10, 10, 10, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  padding: 24px 48px;
+  max-width: 900px;
+  margin: 0 auto 60px;
+  backdrop-filter: blur(10px);
+}
+
+.case-metric {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-align: center;
+}
+
+.c-metric-title {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.4);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.c-metric-value {
+  font-family: 'Outfit Variable', 'Outfit', sans-serif;
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #fff;
+}
+
+.c-metric-divider {
+  width: 1px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* Cards Grid */
+.cases-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+}
+
+.case-card {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 24px;
+  padding: 40px 32px;
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Linha de progresso no topo dos cards */
+.case-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(179, 137, 0, 0.4), transparent);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.case-card:hover {
+  background: rgba(179, 137, 0, 0.03);
+  border-color: rgba(179, 137, 0, 0.25);
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+.case-card:hover::before {
+  opacity: 1;
+}
+
+/* Card Destaque (The Result) */
+.case-result {
+  background: linear-gradient(180deg, rgba(179, 137, 0, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
+  border-color: rgba(179, 137, 0, 0.15);
+}
+
+.case-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 30px;
+}
+
+.case-icon-wrap {
+  width: 50px;
+  height: 50px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  color: var(--gold);
+}
+
+.case-icon-wrap.gold-fill {
+  background: linear-gradient(135deg, #ffcc33 0%, #b38900 100%);
+  border: none;
+  box-shadow: 0 0 20px rgba(179, 137, 0, 0.4);
+}
+
+.case-step {
+  font-family: 'Outfit Variable', 'Outfit', sans-serif;
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: rgba(255, 255, 255, 0.05);
+  line-height: 1;
+}
+
+.case-card h3 {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 16px;
+  letter-spacing: -0.02em;
+}
+
+.case-card p {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 1.7;
+}
+
+.case-card p strong {
+  color: var(--gold-light);
+  font-weight: 600;
+}
+
+/* Estado inicial para animação JS */
+.case-reveal {
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+/* Responsividade */
+@media (max-width: 1024px) {
+  .case-metrics-banner {
+    padding: 20px 24px;
+  }
+}
+
+@media (max-width: 900px) {
+  .cases-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .case-metrics-banner {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+  }
+  
+  .c-metric-divider {
+    display: none;
+  }
+  
+  .case-metric {
+    width: 40%;
+  }
+}
 
 
 
