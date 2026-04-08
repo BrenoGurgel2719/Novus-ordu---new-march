@@ -166,7 +166,8 @@
       top: 20px;
       left: 50%;
       transform: translateX(-50%);
-      width: min(1200px, calc(100% - 40px));
+      width: calc(100% - 40px);
+      max-width: 1200px;
       z-index: 1000;
       border-radius: 20px;
       background: rgba(5, 5, 5, 0.55);
@@ -1127,6 +1128,8 @@
       /* topbar height + original spacing */
     }
 
+    
+
 
 
     /* ──Responsive──────────────────────────────────────────── */
@@ -1186,6 +1189,8 @@
         margin: 0 16px;
       }
     }
+
+
   </style>
 </head>
 
@@ -1745,17 +1750,109 @@
     ════════════════════════════════════════════ -->
     <section class="results-stats" id="metrics" aria-labelledby="stats-title">
       <div class="container">
-        <div class="results-header">
-          <span class="eyebrow">OUR METRICS</span>
-          <h2 id="stats-title">The strength of a proven track record, demonstrated by the <span class="gold-text">consistency of our numbers</span>, reflects our ability to generate real value.</h2>
-         
-        </div>
 
+        <!-- TOP: texto esquerda + visual direita -->
+        <div class="metrics-top">
+
+          <!-- ESQUERDA: eyebrow + h2 -->
+          <div class="metrics-text">
+            <span class="eyebrow">OUR METRICS</span>
+            <h2 id="stats-title">
+              The strength of a proven track record, demonstrated by the
+              <span class="gold-text">consistency of our numbers</span>,
+              reflects our ability to generate real value.
+            </h2>
+          </div>
+
+          <!-- DIREITA: gráfico SVG + logos -->
+          <div class="metrics-visual">
+
+            <!-- Card com gráfico abstrato -->
+            <div class="metrics-chart-card" id="metrics-chart">
+              <div class="mchart-badge">
+                <span class="mchart-badge-arrow">↑</span>
+                <span class="mchart-badge-val">+28.4%</span>
+                <span class="mchart-badge-sub">YTD Return</span>
+              </div>
+
+              <svg class="metrics-svg" viewBox="0 0 440 168" fill="none" xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true">
+                <!-- Grade horizontal -->
+                <line x1="0" y1="42" x2="440" y2="42" stroke="rgba(255,255,255,0.04)" stroke-width="1" />
+                <line x1="0" y1="84" x2="440" y2="84" stroke="rgba(255,255,255,0.04)" stroke-width="1" />
+                <line x1="0" y1="126" x2="440" y2="126" stroke="rgba(255,255,255,0.04)" stroke-width="1" />
+                <!-- Grade vertical -->
+                <line x1="110" y1="0" x2="110" y2="168" stroke="rgba(255,255,255,0.025)" stroke-width="1" />
+                <line x1="220" y1="0" x2="220" y2="168" stroke="rgba(255,255,255,0.025)" stroke-width="1" />
+                <line x1="330" y1="0" x2="330" y2="168" stroke="rgba(255,255,255,0.025)" stroke-width="1" />
+
+                <!-- Benchmark (cinza tracejado) -->
+                <polyline points="0,152 73,146 146,138 220,132 293,127 366,120 440,114" stroke="rgba(255,255,255,0.14)"
+                  stroke-width="1.5" stroke-dasharray="5,4" fill="none" />
+
+                <!-- Área de preenchimento (fade-in via CSS) -->
+                <polygon class="mchart-fill" points="0,168 0,138 73,120 146,103 220,82 293,62 366,40 440,22 440,168"
+                  fill="url(#metricsAreaGrad)" opacity="0" />
+
+                <!-- Linha principal (draw via stroke-dashoffset) -->
+                <polyline class="mchart-line" points="0,138 73,120 146,103 220,82 293,62 366,40 440,22" stroke="#ffcc33"
+                  stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="900"
+                  stroke-dashoffset="900" fill="none" />
+
+                <!-- Pontos de dado -->
+                <circle class="mchart-dot" cx="146" cy="103" r="4.5" fill="#ffcc33" opacity="0" />
+                <circle class="mchart-dot" cx="293" cy="62" r="4.5" fill="#ffcc33" opacity="0" />
+                <!-- Ponto final com pulso -->
+                <circle class="mchart-dot-end" cx="440" cy="22" r="5" fill="#ffcc33" opacity="0" />
+                <circle class="mchart-dot-pulse" cx="440" cy="22" r="14" fill="#ffcc33" opacity="0"
+                  style="transform-box:fill-box;transform-origin:center" />
+
+                <!-- Labels eixo X -->
+                <text x="0" y="164" fill="rgba(255,255,255,0.2)" font-size="9" font-family="sans-serif">Q1</text>
+                <text x="104" y="164" fill="rgba(255,255,255,0.2)" font-size="9" font-family="sans-serif">Q2</text>
+                <text x="214" y="164" fill="rgba(255,255,255,0.2)" font-size="9" font-family="sans-serif">Q3</text>
+                <text x="323" y="164" fill="rgba(255,255,255,0.2)" font-size="9" font-family="sans-serif">Q4</text>
+                <text x="420" y="164" fill="rgba(255,255,255,0.2)" font-size="9" font-family="sans-serif">YTD</text>
+
+                <defs>
+                  <linearGradient id="metricsAreaGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#ffcc33" stop-opacity="0.28" />
+                    <stop offset="100%" stop-color="#ffcc33" stop-opacity="0" />
+                  </linearGradient>
+                </defs>
+              </svg>
+
+              <!-- Legenda -->
+              <div class="mchart-legend">
+                <span class="mchart-legend-dot"></span>
+                <span class="mchart-legend-txt">Novus Portfolio</span>
+                <span class="mchart-legend-dash"></span>
+                <span class="mchart-legend-txt">Benchmark</span>
+              </div>
+            </div><!-- /.metrics-chart-card -->
+
+            <!-- Logos de confiança -->
+            <div class="metrics-logos">
+              <p class="logos-label">Trusted by leading institutions worldwide</p>
+              <div class="logos-grid">
+                <span class="logo-item">MERIDIAN<strong> Capital</strong></span>
+                <span class="logo-item">ATLAS<strong> Group</strong></span>
+                <span class="logo-item">APEX<strong> Ventures</strong></span>
+                <span class="logo-item">SUMMIT<strong> Holdings</strong></span>
+                <span class="logo-item">ZENITH<strong> Fund</strong></span>
+                <span class="logo-item">HORIZON<strong> Partners</strong></span>
+              </div>
+            </div>
+
+          </div><!-- /.metrics-visual -->
+        </div><!-- /.metrics-top -->
+
+        <!-- BAIXO: grid de stat cards (inalterado) -->
         <div class="stats-grid">
+
           <div class="stat-card reveal" data-animate>
             <div class="stat-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" role="img"
-                aria-label="Growth chart">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                 <path d="M3 17l6-6 4 4 7-7" stroke-linecap="round" stroke-linejoin="round" />
                 <path d="M21 7v6h-6" stroke-linecap="round" stroke-linejoin="round" />
               </svg>
@@ -1820,13 +1917,11 @@
             </div>
             <div class="card-light" aria-hidden="true"></div>
           </div>
-        </div>
+
+        </div><!-- /.stats-grid -->
       </div>
       <div class="glow-up" aria-hidden="true"></div>
     </section>
-
-    <div class="section-break" aria-hidden="true"></div>
-
     <!-- ═══════════════════════════════════════════
      SECTION: CASE STUDIES
 ════════════════════════════════════════════ -->
@@ -1834,9 +1929,9 @@
 
 
 
-      
 
-      
+
+
 
 
     </section>

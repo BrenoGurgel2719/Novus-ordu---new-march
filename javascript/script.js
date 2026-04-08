@@ -523,5 +523,45 @@ function animateNumber(el) {
   else console.warn('CountUp error:', counter.error);
 }
 
+//Navbar inicial
+
+document.addEventListener("DOMContentLoaded", () => {
+    // 1. Selecionamos todos os elementos internos que vão aparecer depois
+    const navElements = document.querySelectorAll('.nav-logo, .nav-links li, .nav-cta, .nav-toggle');
+    
+    // 2. Setamos o estado INICIAL (para não piscar na tela)
+    anime.set(navElements, { 
+      opacity: 0, 
+      translateY: 15 // Começam invisíveis e um pouco rebaixados
+    });
+    
+    anime.set('.navbar', { 
+      width: '60px', // Começa parecendo um botão pequeno/pílula
+    });
+
+    // 3. Criamos a Timeline da animação
+    const tl = anime.timeline({
+      easing: 'easeOutExpo', // Curva de aceleração elegante
+    });
+
+    // Passo A: Expansão da Navbar
+    tl.add({
+      targets: '.navbar',
+      width: 'calc(100% - 40px)', // Expande até a largura da tela (o max-width de 1200px segura o limite)
+      duration: 1200,
+      delay: 600, // Tempo de espera "fechada" após abrir a página
+    })
+    
+    // Passo B: Revelação dos elementos internos
+    .add({
+      targets: navElements,
+      opacity: [0, 1], // Vai de invisível a visível
+      translateY: [15, 0], // Sobe para a posição original
+      duration: 800,
+      delay: anime.stagger(80), // Efeito cascata lindo de 80ms entre cada item
+      easing: 'easeOutQuad'
+    }, '-=500'); // O '-=500' faz essa animação começar 500ms ANTES da expansão terminar, unindo os movimentos
+  });
+
 
 
