@@ -499,6 +499,18 @@ if (yearEl) yearEl.textContent = new Date().getFullYear();
         });
       }
     });
+
+    // 2. NOVA PARTE: Ativação do Gráfico
+    const chartCard = section.querySelector('.metrics-chart-card');
+    if (chartCard) {
+      // Um pequeno delay (ex: 400ms) cria uma coreografia legal: 
+      // os números começam a subir e logo em seguida o gráfico desenha
+      setTimeout(() => {
+        chartCard.classList.add('animated');
+      }, 400); 
+    }
+
+    
   }
 
   function animateMethodology(section) {
