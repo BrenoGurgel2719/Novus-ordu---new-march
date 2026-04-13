@@ -3524,7 +3524,7 @@ html.lenis body {
   border-radius: 100px;
   padding: 8px 16px 8px 8px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-  animation: wa-float 4s ease-in-out infinite;
+  animation: wa-float 4s ease-in-out infinite !important;
   transform-origin: bottom right;
   transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1);
 }
@@ -3541,7 +3541,7 @@ html.lenis body {
   right: 22px;
   width: 12px;
   height: 12px;
-  background: rgba(10, 10, 10, 0.95);
+  background: rgb(10, 8, 8)0, 0.95);
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   border-right: 1px solid rgba(255, 255, 255, 0.08);
   transform: rotate(45deg);
@@ -3624,12 +3624,12 @@ html.lenis body {
   border: 2px solid rgba(39, 200, 64, 0.8);
   border-radius: 50%;
   z-index: -1;
-  animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+  animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite !important;
   pointer-events: none;
 }
 
 .wa-pulse-delay {
-  animation-delay: 0.6s;
+  animation-delay: 0.6s !important;
 }
 
 /* ── Animações ── */
