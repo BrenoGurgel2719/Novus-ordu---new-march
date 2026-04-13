@@ -410,7 +410,7 @@ if (yearEl) yearEl.textContent = new Date().getFullYear();
 
       scrollObserver.unobserve(t);
     });
-  }, { threshold: 0.35 });
+  }, { threshold: 0.25 });
 
   document.querySelectorAll('section').forEach(s => scrollObserver.observe(s));
 
