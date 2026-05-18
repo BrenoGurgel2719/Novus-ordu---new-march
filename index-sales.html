@@ -3003,6 +3003,15 @@
   <!-- countup.js e anime.js: já estavam com defer — correto -->
   <script defer src="https://cdn.jsdelivr.net/npm/countup.js@2.8.0/dist/countUp.umd.js"></script>
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+  <!-- Canvas: carregado dinamicamente apenas em desktop — mobile faz download de zero bytes -->
+  <script>
+    if (window.matchMedia('(min-width: 769px)').matches) {
+      var _cv = document.createElement('script');
+      _cv.src = 'javascript/canvas.js';
+      _cv.defer = true;
+      document.head.appendChild(_cv);
+    }
+  </script>
   <script defer src="javascript/script.js"></script>
 
 
