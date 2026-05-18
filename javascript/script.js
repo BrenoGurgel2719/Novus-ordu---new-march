@@ -240,13 +240,18 @@ if (yearEl) yearEl.textContent = new Date().getFullYear();
   function initPoints() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
-    points = Array.from({ length: POINT_COUNT }, () => ({
-      x: Math.random() * canvas.width,
-      y: Math.random() * canvas.height,
-      vx: (Math.random() - 0.5) * 0.4,
-      vy: (Math.random() - 0.5) * 0.4,
-      radius: Math.random() * 1.5 + 1
-    }));
+    // C. Reutiliza o array existente em vez de criar um novo a cada resize
+    // Evita que o GC precise coletar 80 objetos antigos no próximo ciclo
+    points.length = 0;
+    for (let i = 0; i < POINT_COUNT; i++) {
+      points.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        vx: (Math.random() - 0.5) * 0.4,
+        vy: (Math.random() - 0.5) * 0.4,
+        radius: Math.random() * 1.5 + 1
+      });
+    }
   }
 
   function draw() {
@@ -254,6 +259,10 @@ if (yearEl) yearEl.textContent = new Date().getFullYear();
     rafId = requestAnimationFrame(draw);
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // B. Propriedades estáticas declaradas UMA VEZ por frame — evita Context State Thrashing
+    ctx.fillStyle = `rgba(${GOLD},0.5)`;
+    ctx.lineWidth = 0.5;
 
     for (let i = 0; i < points.length; i++) {
       const p = points[i];
@@ -264,8 +273,7 @@ if (yearEl) yearEl.textContent = new Date().getFullYear();
 
       ctx.beginPath();
       ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(${GOLD},0.5)`;
-      ctx.fill();
+      ctx.fill(); // fillStyle já foi setado antes do loop
 
       for (let j = i + 1; j < points.length; j++) {
         const p2 = points[j];
@@ -275,7 +283,7 @@ if (yearEl) yearEl.textContent = new Date().getFullYear();
 
         if (dist < CONNECTION_DIST) {
           ctx.beginPath();
-          ctx.lineWidth = 0.5;
+          // lineWidth = 0.5 já está setado — apenas strokeStyle (dinâmico) muda aqui
           ctx.strokeStyle = `rgba(${GOLD},${(1 - dist / CONNECTION_DIST) * 0.2})`;
           ctx.moveTo(p.x, p.y);
           ctx.lineTo(p2.x, p2.y);
@@ -289,11 +297,12 @@ if (yearEl) yearEl.textContent = new Date().getFullYear();
         const mDist = Math.sqrt(mdx * mdx + mdy * mdy);
         if (mDist < MOUSE_DIST) {
           ctx.beginPath();
-          ctx.lineWidth = 0.8;
+          ctx.lineWidth = 0.8; // override pontual para linha do mouse
           ctx.strokeStyle = `rgba(${GOLD},${(1 - mDist / MOUSE_DIST) * 0.4})`;
           ctx.moveTo(p.x, p.y);
           ctx.lineTo(mouse.x, mouse.y);
           ctx.stroke();
+          ctx.lineWidth = 0.5; // restaura para a próxima iteração do loop
         }
       }
     }
@@ -326,8 +335,18 @@ if (yearEl) yearEl.textContent = new Date().getFullYear();
     mouse.y = null;
   }, { passive: true });
 
-  initPoints();
-  draw();
+  // A. Protege o LCP: só inicia as partículas quando o browser estiver ocioso
+  if ('requestIdleCallback' in window) {
+    requestIdleCallback(() => {
+      initPoints();
+      draw();
+    });
+  } else {
+    setTimeout(() => {
+      initPoints();
+      draw();
+    }, 1000);
+  }
 })();
 
 // ─────────────────────────────────────────────
@@ -593,6 +612,3 @@ document.addEventListener("DOMContentLoaded", () => {
       easing: 'easeOutQuad'
     }, '-=500'); // O '-=500' faz essa animação começar 500ms ANTES da expansão terminar, unindo os movimentos
   });
-
-
-
