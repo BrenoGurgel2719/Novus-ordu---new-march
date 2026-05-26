@@ -221,64 +221,34 @@ if (yearEl) yearEl.textContent = new Date().getFullYear();
 // ─────────────────────────────────────────────
 // 2. ISOMETRIC MOCKUP — entrance + scroll parallax
 // ─────────────────────────────────────────────
+// ─────────────────────────────────────────────
+// 2. MOCKUP PROCESSO DIGITAL — Entrada Suave (Substitui o antigo Isometric 3D)
+// ─────────────────────────────────────────────
 (function initMockup() {
-  const wrapper = document.getElementById('iso-wrapper');
   const stage = document.getElementById('mockup-stage');
+  const wrapper = document.querySelector('.legal-ui-wrapper');
   if (!wrapper || !stage) return;
 
-  let hasEntered = false;
+  // Define o estado inicial (invisível e levemente rebaixado)
+  wrapper.style.opacity = '0';
+  wrapper.style.transform = 'translateY(50px)';
+  wrapper.style.transition = 'all 1.2s cubic-bezier(0.23, 1, 0.32, 1)';
 
-  wrapper.style.cssText += 'transform:perspective(1400px) rotateX(45deg) rotateZ(-4deg) scale(0.85);opacity:0;transition:none;';
-
+  // Cria o observador para disparar a animação apenas quando chegar na tela
   const entranceObserver = new IntersectionObserver(entries => {
-    if (!entries[0].isIntersecting || hasEntered) return;
-    hasEntered = true;
+    if (!entries[0].isIntersecting) return;
 
-    setTimeout(() => {
-      wrapper.style.transition = 'transform 1.4s cubic-bezier(0.23,1,0.32,1), opacity 1s ease';
+    // Remove o atraso e revela o elemento
+    requestAnimationFrame(() => {
       wrapper.style.opacity = '1';
-      wrapper.style.transform = 'perspective(1400px) rotateX(18deg) rotateZ(-4deg) scale(0.95)';
-    }, 150);
+      wrapper.style.transform = 'translateY(0)';
+    });
 
+    // Desconecta após animar a primeira vez
     entranceObserver.disconnect();
   }, { threshold: 0.15 });
 
   entranceObserver.observe(stage);
-
-  if (isMobile) return; // skip parallax on mobile
-
-  let rafPending = false;
-  let stageTop = 0;
-  let stageH = 0;
-
-  const updateCache = () => {
-    const r = stage.getBoundingClientRect();
-    stageTop = r.top + window.scrollY;
-    stageH = r.height;
-  };
-  updateCache();
-
-  const ro = new ResizeObserver(updateCache);
-  ro.observe(stage);
-  window.addEventListener('resize', updateCache, { passive: true });
-
-  window.addEventListener('scroll', () => {
-    if (!hasEntered || rafPending) return;
-    rafPending = true;
-
-    requestAnimationFrame(() => {
-      const viewH = window.innerHeight;
-      const rectTop = stageTop - window.scrollY;
-      const progress = (viewH / 2 - (rectTop + stageH / 2)) / (viewH * 0.6);
-      const clamped = Math.max(-1, Math.min(1, progress));
-
-      wrapper.style.transition = 'none';
-      wrapper.style.transform =
-        `perspective(1400px) rotateX(${18 - clamped * 4}deg) rotateZ(${-4 + clamped * 2}deg) scale(${0.95 - Math.abs(clamped) * 0.02})`;
-
-      rafPending = false;
-    });
-  }, { passive: true });
 })();
 
 // ─────────────────────────────────────────────
@@ -294,7 +264,7 @@ if (yearEl) yearEl.textContent = new Date().getFullYear();
       try { if (t.classList.contains('cases-section')) animateCases(t); } catch (e) { console.warn('animateCases', e); }
       try { if (t.classList.contains('services-section')) animateServices(t); } catch (e) { console.warn('animateServices', e); }
       try { if (t.classList.contains('results-stats')) animateStats(t); } catch (e) { console.warn('animateStats', e); }
-      try { if (t.classList.contains('methodology-section')) animateMethodology(t); } catch (e) { console.warn('animateMethodology', e); }
+      try { if (t.classList.contains('methodology-section')) animateMethodologyV2(t); } catch (e) { console.warn('animateMethodologyV2', e); }
 
       scrollObserver.unobserve(t);
     });
@@ -321,22 +291,22 @@ if (yearEl) yearEl.textContent = new Date().getFullYear();
   }
 
   function animateCases(section) {
-  anime.timeline({ easing: 'easeOutExpo' })
-    .add({
-      targets: section.querySelectorAll('.reveal-up'),
-      translateY: [40, 0],
-      opacity: [0, 1],
-      duration: 1000,
-      delay: anime.stagger(150)
-    })
-    .add({
-      targets: section.querySelectorAll('.case-reveal'),
-      translateY: [40, 0],
-      opacity: [0, 1],
-      duration: 1000,
-      delay: anime.stagger(200) // Efeito cascata lindo nos 3 cards
-    }, '-=600');
-}
+    anime.timeline({ easing: 'easeOutExpo' })
+      .add({
+        targets: section.querySelectorAll('.reveal-up'),
+        translateY: [40, 0],
+        opacity: [0, 1],
+        duration: 1000,
+        delay: anime.stagger(150)
+      })
+      .add({
+        targets: section.querySelectorAll('.case-reveal'),
+        translateY: [40, 0],
+        opacity: [0, 1],
+        duration: 1000,
+        delay: anime.stagger(200) // Efeito cascata lindo nos 3 cards
+      }, '-=600');
+  }
 
   function animateServices(section) {
 
@@ -395,13 +365,13 @@ if (yearEl) yearEl.textContent = new Date().getFullYear();
       // os números começam a subir e logo em seguida o gráfico desenha
       setTimeout(() => {
         chartCard.classList.add('animated');
-      }, 400); 
+      }, 400);
     }
 
-    
+
   }
 
-  function animateMethodology(section) {
+  function animateMethodologyV2(section) {
     anime.timeline({ easing: 'easeOutQuad' })
       .add({
         targets: section.querySelector('.track-progress'),
@@ -410,67 +380,93 @@ if (yearEl) yearEl.textContent = new Date().getFullYear();
         easing: 'easeInOutQuad'
       })
       .add({
-        targets: section.querySelectorAll('.method-item'),
-        translateY: [40, 0],
+        targets: section.querySelectorAll('.method-card'),
+        translateY: [30, 0],
         opacity: [0, 1],
-        delay: anime.stagger(200),
-        duration: 1000
-      }, '-=1500');
+        delay: anime.stagger(150),
+        duration: 900
+      }, '-=1600');
   }
 })();
 
 // ─────────────────────────────────────────────
 // 4. COUNTUP — reusable number animation
 // ─────────────────────────────────────────────
-function animateNumber(el) {
-  if (typeof countUp === 'undefined') {
-    el.textContent = el.dataset.target + (el.dataset.suffix || '');
-    console.warn('countUp not loaded — displaying static value.');
-    return;
-  }
+// ─────────────────────────────────────────────
+// ANIMAÇÃO COUNTUP (MÉTRICAS JURÍDICAS)
+// ─────────────────────────────────────────────
+(function initCounters() {
+  const counters = document.querySelectorAll('.counter');
+  if (counters.length === 0) return;
 
-  const counter = new countUp.CountUp(el, +el.dataset.target, {
-    duration: 3,
-    useEasing: true,
-    useGrouping: true,
-    separator: '.',
-    decimal: ',',
-    suffix: el.dataset.suffix || ''
-  });
+  // Função para animar cada número
+  const animateCounter = (counter) => {
+    const target = +counter.getAttribute('data-target');
+    const duration = 2000; // 2 segundos de animação
+    let startTime = null;
 
-  if (!counter.error) counter.start();
-  else console.warn('CountUp error:', counter.error);
-}
+    const step = (currentTime) => {
+      if (!startTime) startTime = currentTime;
+      const progress = Math.min((currentTime - startTime) / duration, 1);
+
+      // Efeito ease-out para desacelerar no final
+      const easeOut = 1 - Math.pow(1 - progress, 3);
+      const currentNum = Math.floor(easeOut * target);
+
+      counter.innerText = currentNum;
+
+      if (progress < 1) {
+        requestAnimationFrame(step);
+      } else {
+        counter.innerText = target; // Garante o número final exato
+      }
+    };
+
+    requestAnimationFrame(step);
+  };
+
+  // IntersectionObserver para disparar apenas quando visível na tela
+  const observer = new IntersectionObserver((entries, obs) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        animateCounter(entry.target);
+        obs.unobserve(entry.target); // Anima apenas uma vez
+      }
+    });
+  }, { threshold: 0.5 }); // Dispara quando 50% do elemento estiver visível
+
+  counters.forEach(counter => observer.observe(counter));
+})();
 
 //Navbar inicial
 
 document.addEventListener("DOMContentLoaded", () => {
-    // 1. Selecionamos todos os elementos internos que vão aparecer depois
-    const navElements = document.querySelectorAll('.nav-logo, .nav-links li, .nav-cta, .nav-toggle');
-    
-    // 2. Setamos o estado INICIAL (para não piscar na tela)
-    anime.set(navElements, { 
-      opacity: 0, 
-      translateY: 15 // Começam invisíveis e um pouco rebaixados
-    });
-    
-    anime.set('.navbar', { 
-      width: '60px', // Começa parecendo um botão pequeno/pílula
-    });
+  // 1. Selecionamos todos os elementos internos que vão aparecer depois
+  const navElements = document.querySelectorAll('.nav-logo, .nav-links li, .nav-cta, .nav-toggle');
 
-    // 3. Criamos a Timeline da animação
-    const tl = anime.timeline({
-      easing: 'easeOutExpo', // Curva de aceleração elegante
-    });
+  // 2. Setamos o estado INICIAL (para não piscar na tela)
+  anime.set(navElements, {
+    opacity: 0,
+    translateY: 15 // Começam invisíveis e um pouco rebaixados
+  });
 
-    // Passo A: Expansão da Navbar
-    tl.add({
-      targets: '.navbar',
-      width: 'calc(100% - 40px)', // Expande até a largura da tela (o max-width de 1200px segura o limite)
-      duration: 1200,
-      delay: 600, // Tempo de espera "fechada" após abrir a página
-    })
-    
+  anime.set('.navbar', {
+    width: '60px', // Começa parecendo um botão pequeno/pílula
+  });
+
+  // 3. Criamos a Timeline da animação
+  const tl = anime.timeline({
+    easing: 'easeOutExpo', // Curva de aceleração elegante
+  });
+
+  // Passo A: Expansão da Navbar
+  tl.add({
+    targets: '.navbar',
+    width: 'calc(100% - 40px)', // Expande até a largura da tela (o max-width de 1200px segura o limite)
+    duration: 1200,
+    delay: 600, // Tempo de espera "fechada" após abrir a página
+  })
+
     // Passo B: Revelação dos elementos internos
     .add({
       targets: navElements,
@@ -480,4 +476,4 @@ document.addEventListener("DOMContentLoaded", () => {
       delay: anime.stagger(80), // Efeito cascata lindo de 80ms entre cada item
       easing: 'easeOutQuad'
     }, '-=500'); // O '-=500' faz essa animação começar 500ms ANTES da expansão terminar, unindo os movimentos
-  });
+});
