@@ -39,12 +39,18 @@ function validateFields(fields) {
   const navLinks = document.querySelectorAll('.nav-link');
   const sections = document.querySelectorAll('section[id], header[id]');
 
-  // Extracted helper — avoids 3 copies of the same 4 lines
+  // Keep visual, ARIA, and keyboard states synchronized.
+  function setMenuState(isOpen) {
+    mobileMenu.classList.toggle('open', isOpen);
+    toggle.classList.toggle('open', isOpen);
+    toggle.setAttribute('aria-expanded', String(isOpen));
+    toggle.setAttribute('aria-label', isOpen ? 'Fechar menu' : 'Abrir menu');
+    mobileMenu.setAttribute('aria-hidden', String(!isOpen));
+    mobileMenu.toggleAttribute('inert', !isOpen);
+  }
+
   function closeMenu() {
-    mobileMenu.classList.remove('open');
-    toggle.classList.remove('open');
-    toggle.setAttribute('aria-expanded', 'false');
-    mobileMenu.setAttribute('aria-hidden', 'true');
+    setMenuState(false);
   }
 
   // Active nav link via IntersectionObserver
@@ -62,10 +68,11 @@ function validateFields(fields) {
 
   // Mobile menu toggle
   toggle.addEventListener('click', () => {
-    const isOpen = mobileMenu.classList.toggle('open');
-    toggle.classList.toggle('open', isOpen);
-    toggle.setAttribute('aria-expanded', String(isOpen));
-    mobileMenu.setAttribute('aria-hidden', String(!isOpen));
+    setMenuState(!mobileMenu.classList.contains('open'));
+  });
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeMenu();
   });
 
   // Close on any mobile link click
